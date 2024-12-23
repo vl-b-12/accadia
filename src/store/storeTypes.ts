@@ -1,17 +1,17 @@
-import {store} from './store';
+import { store } from "./store";
 
 export enum REQUEST {
-    GET = 'GET',
-    POST = 'POST',
-    DELETE = 'DELETE',
-    PATCH = 'PATCH',
+  GET = "GET",
+  POST = "POST",
+  DELETE = "DELETE",
+  PATCH = "PATCH",
 }
 
 export interface ServerError {
-    data?: unknown;
-    status?: unknown;
-    message?: string;
-    error?: unknown;
+  data?: unknown;
+  status?: unknown;
+  message?: string;
+  error?: unknown;
 }
 
 // export interface ServerViolation {

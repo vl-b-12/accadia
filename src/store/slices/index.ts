@@ -1,1 +1,1 @@
-export {default as cartSlice} from "./CartSlice/cartSlice"
+export { default as cartSlice } from "./CartSlice/cartSlice";

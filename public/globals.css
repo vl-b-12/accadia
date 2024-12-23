@@ -10,20 +10,20 @@
 
 @layer base {
   :root {
-    --gray-0: #FFFFFF;
-    --gray-5: #F8F8F8;
-    --gray-10: #F9F9F9;
-    --gray-25: #DEDEDE;
-    --gray-70: #5B5B5B;
+    --gray-0: #ffffff;
+    --gray-5: #f8f8f8;
+    --gray-10: #f9f9f9;
+    --gray-25: #dedede;
+    --gray-70: #5b5b5b;
 
-    --violent-10: #FDF6FF;
-    --violent-20: #FAEEFE;
-    --violent-30: #D6B1E2;
-    --violent-40: #B946DE;
-    --violent-80: #561A69;
-    --violent-90: #3F184B;
+    --violent-10: #fdf6ff;
+    --violent-20: #faeefe;
+    --violent-30: #d6b1e2;
+    --violent-40: #b946de;
+    --violent-80: #561a69;
+    --violent-90: #3f184b;
 
-    --pink-default: #FF2D9D;
+    --pink-default: #ff2d9d;
 
     --radius: 0.5rem;
   }

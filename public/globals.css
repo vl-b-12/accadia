@@ -1,0 +1,30 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}
+
+@layer base {
+  :root {
+    --gray-0: #FFFFFF;
+    --gray-5: #F8F8F8;
+    --gray-10: #F9F9F9;
+    --gray-25: #DEDEDE;
+    --gray-70: #5B5B5B;
+
+    --violent-10: #FDF6FF;
+    --violent-20: #FAEEFE;
+    --violent-30: #D6B1E2;
+    --violent-40: #B946DE;
+    --violent-80: #561A69;
+    --violent-90: #3F184B;
+
+    --pink-default: #FF2D9D;
+
+    --radius: 0.5rem;
+  }
+}

@@ -11,7 +11,7 @@ export const RTK_TAGS = {
 };
 
 const baseQuery = fetchBaseQuery({
-  baseUrl: "/",
+  baseUrl: "https://346e-176-37-201-141.ngrok-free.app",
   prepareHeaders: (headers, {}) => {
     return headers;
   },

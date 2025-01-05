@@ -2,24 +2,15 @@ import { REQUEST } from "@/store/storeTypes";
 import { BaseQueryMeta } from "@reduxjs/toolkit/query";
 import { apiRtk } from "../";
 
-interface SignUp {
-  email: string;
-  password: string;
-}
+interface QueryParams {}
 
-interface SignUpResponse {
-  accessToken?: string;
-  refreshToken?: string;
-  status: string;
-}
-
-export const loginApi = apiRtk.injectEndpoints({
+export const productApi = apiRtk.injectEndpoints({
   endpoints: (build) => ({
-    signUp: build.mutation<SignUpResponse, SignUp>({
-      query: (props: SignUp) => ({
-        url: "/api/users/login",
-        method: REQUEST.POST,
-        body: props,
+    getProducts: build.query<QueryParams, QueryParams>({
+      query: (props: QueryParams) => ({
+        url: "/api/catalog",
+        method: REQUEST.GET,
+        params: props,
       }),
       transformErrorResponse: (
         error: unknown,
@@ -36,4 +27,4 @@ export const loginApi = apiRtk.injectEndpoints({
   }),
 });
 
-export const { useSignUpMutation } = loginApi;
+export const { useGetProductsQuery } = productApi;

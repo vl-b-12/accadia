@@ -3,6 +3,7 @@ import "../public/globals.css";
 import Header from "@/components/Header/Header";
 import Providers from "@/components/Providers/Providers";
 import { Montserrat } from "next/font/google";
+import React from "react";
 
 export const metadata: Metadata = {
   title: "Jawelianna",

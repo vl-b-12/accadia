@@ -1,36 +1,44 @@
-"use client";
-
 import React from "react";
-import Image from "next/image";
 import { useSelector } from "react-redux";
 import { RootState } from "@/store/storeTypes";
 import { cn } from "@/lib/utils";
+import { usePathname, useRouter } from "next/navigation";
+import CartIcon from "@/components/CartButton/CartIcon/CartIcon";
 
 const CartButton = () => {
-  const cart = useSelector((state: RootState) => state.cart.cart);
-  const quantity = cart.length;
+  const quantity = useSelector((state: RootState) => state.cart.totalQnt);
+  const { push } = useRouter();
+  const pathname = usePathname();
+
+  const isCartPage = pathname === "/cart";
 
   return (
     <div
       className={cn(
         "relative flex justify-center items-center size-[66px] border border-violent-30 hover:border-violent-40 rounded-md cursor-pointer duration-300",
-        { "border-violent-40": !!quantity },
+        {
+          "border-violent-40": !!quantity,
+          "bg-violent-40": isCartPage,
+        },
       )}
+      onClick={() => push("/cart")}
     >
-      <Image
-        src="/icons/cart-icon.svg"
-        alt="Cart icon"
-        width={24}
-        height={24}
-        className={cn("opacity-20 hover:opacity-100 duration-300", {
-          "opacity-100": !!quantity,
-        })}
-      />
+      <div
+        className={cn(
+          "opacity-20 hover:opacity-100 fill-violent-40 duration-300",
+          {
+            "opacity-100": !!quantity,
+            "fill-white": isCartPage,
+          },
+        )}
+      >
+        <CartIcon />
+      </div>
       {!!quantity && (
         <div
           className={cn(
-            "absolute top-3 right-3 bg-violent-40 border-2 border-gray-0 text-xs font-bold text-gray-0 px-1 text-center rounded-full",
-            { "right-1": quantity >= 10 },
+            "absolute top-2 right-2 flex items-center justify-center bg-violent-40 border-2 border-gray-0 text-xs font-bold text-gray-0 size-6 text-center rounded-full",
+            { "bg-white text-violent-40 border-violent-40": isCartPage },
           )}
         >
           {quantity}

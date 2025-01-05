@@ -23,6 +23,7 @@ const config: Config = {
           20: "var(--violent-20)",
           30: "var(--violent-30)",
           40: "var(--violent-40)",
+          60: "var(--violent-60)",
           80: "var(--violent-80)",
           90: "var(--violent-90)",
         },
@@ -38,6 +39,9 @@ const config: Config = {
       },
       padding: {
         42: "42px",
+      },
+      boxShadow: {
+        1: "0px 4px 17.1px 0px rgba(0, 0, 0, 0.05)",
       },
     },
   },

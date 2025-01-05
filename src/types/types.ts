@@ -1,6 +1,7 @@
 interface ProductCharacteristic {
   id: number;
   name: string;
+  description: string;
 }
 
 export interface Product {
@@ -9,7 +10,12 @@ export interface Product {
   name: string;
   karats: string;
   characteristics: ProductCharacteristic[];
-  price: string;
+  price: number;
   sku: string;
   image: string;
+}
+
+export interface CartProduct extends Product {
+  quantity: number;
+  totalPrice: number;
 }

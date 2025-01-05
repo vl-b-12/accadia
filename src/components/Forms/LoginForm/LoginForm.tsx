@@ -2,7 +2,7 @@
 
 import React from "react";
 import Image from "next/image";
-import { loginFormSchema } from "@/components/schemas/loginSchema";
+import { loginFormSchema } from "@/schemas/loginSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import {
@@ -16,9 +16,11 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
+import { useSignUpMutation } from "@/store/services/loginApi";
 
 const LoginForm = () => {
   const { push } = useRouter();
+  const [signUp, { isError }] = useSignUpMutation();
 
   const form = useForm<z.infer<typeof loginFormSchema>>({
     resolver: zodResolver(loginFormSchema),
@@ -75,7 +77,7 @@ const LoginForm = () => {
           />
 
           <Button type="submit" variant="primary" size="primary">
-            Save changes
+            Login
           </Button>
         </form>
 

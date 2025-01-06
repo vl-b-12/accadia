@@ -1,17 +1,18 @@
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import { apiRtk } from "@/store/services";
-import { cartSlice } from "@/store/slices";
+import { cartSlice, customerSlice } from "@/store/slices";
 import storage from "redux-persist/lib/storage";
 import { persistReducer, persistStore } from "redux-persist";
 
 const persistConfig = {
   key: "root",
   storage,
-  whitelist: ["cart"],
+  whitelist: ["cart", "customer"],
 };
 
 const rootReducer = combineReducers({
   cart: cartSlice,
+  customer: customerSlice,
   [apiRtk.reducerPath]: apiRtk.reducer,
 });
 

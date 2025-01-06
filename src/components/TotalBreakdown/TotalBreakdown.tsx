@@ -5,7 +5,11 @@ import { useSelector } from "react-redux";
 import { RootState } from "@/store/storeTypes";
 import { formatPrice } from "@/lib/utils";
 
-const TotalBreakdown = () => {
+interface TotalBreakdownProps {
+  step: number;
+}
+
+const TotalBreakdown = ({ step }: TotalBreakdownProps) => {
   const cart = useSelector((state: RootState) => state.cart);
 
   const { currencySymbol, price } = formatPrice(cart.totalPrice);
@@ -25,12 +29,14 @@ const TotalBreakdown = () => {
           </div>
         ))}
       </div>
-      <div className="flex justify-between gap-1 p-4 bg-violent-10 rounded-md">
-        <div className="font-medium">Total:</div>
-        <div className="text-xl font-light">
-          {currencySymbol} <span className="font-bold">{price}</span>
+      {step === 1 && (
+        <div className="flex justify-between gap-1 p-4 bg-violent-10 rounded-md">
+          <div className="font-medium">Total:</div>
+          <div className="text-xl font-light">
+            {currencySymbol} <span className="font-bold">{price}</span>
+          </div>
         </div>
-      </div>
+      )}
     </div>
   );
 };

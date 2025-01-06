@@ -20,6 +20,7 @@ const buttonVariants = cva(
         ghost:
           "hover:bg-neutral-100 hover:text-neutral-900 dark:hover:bg-neutral-800 dark:hover:text-neutral-50",
         link: "text-neutral-900 underline-offset-4 hover:underline dark:text-neutral-50",
+        add: "border border-violent-90 rounded-md text-md font-medium",
         primary:
           "bg-violent-90 text-lg text-gray-0 font-bold hover:bg-violent-80 active:bg-violent-90",
       },
@@ -28,6 +29,7 @@ const buttonVariants = cva(
         sm: "h-9 rounded-md px-3",
         lg: "h-11 rounded-md px-8",
         icon: "h-10 w-10",
+        responsive: "w-full h-full px-1",
         primary: "py-4 px-8 w-full h-14",
       },
     },

@@ -19,3 +19,15 @@ export interface CartProduct extends Product {
   quantity: number;
   totalPrice: number;
 }
+
+export interface Customer {
+  id: number;
+  name: string;
+  email: string;
+}
+
+export interface NavItem {
+  id: number;
+  name: string;
+  icon: string;
+}

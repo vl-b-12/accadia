@@ -5,12 +5,14 @@ import { cn } from "@/lib/utils";
 import { usePathname, useRouter } from "next/navigation";
 import CartIcon from "@/components/CartButton/CartIcon/CartIcon";
 
+const cartPages = ["/cart", "/add-customer"];
+
 const CartButton = () => {
   const quantity = useSelector((state: RootState) => state.cart.totalQnt);
   const { push } = useRouter();
   const pathname = usePathname();
 
-  const isCartPage = pathname === "/cart";
+  const isCartPage = cartPages.includes(pathname);
 
   return (
     <div

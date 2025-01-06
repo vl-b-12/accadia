@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useEffect } from "react";
 import { Form } from "@/components/ui/form";
 import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
@@ -30,6 +30,12 @@ const SelectCustomer = ({ step, setStep }: SelectCustomerProps) => {
       tax: 0,
     },
   });
+
+  useEffect(() => {
+    if (selectedCustomer) {
+      form.setValue("name", selectedCustomer.name);
+    }
+  }, [selectedCustomer]);
 
   return (
     <>

@@ -91,11 +91,7 @@ const AddCustomerSection = () => {
 
   return (
     <div>
-      <FormNavigation
-        step={step}
-        setStep={setStep}
-        navConfig={addCustomerNavConfig}
-      />
+      <FormNavigation step={step} navConfig={addCustomerNavConfig} />
       <Form {...form}>
         <form
           className="w-full pt-6"

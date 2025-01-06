@@ -4,11 +4,10 @@ import FormNavigationItem from "@/components/FormNavigationItem/FormNavigationIt
 
 interface FormNavigationProps {
   step: number;
-  setStep: (step: number) => void;
   navConfig: NavItem[];
 }
 
-const FormNavigation = ({ step, setStep, navConfig }: FormNavigationProps) => {
+const FormNavigation = ({ step, navConfig }: FormNavigationProps) => {
   return (
     <div className="grid grid-cols-4 gap-x-2.5">
       {navConfig.map((item) => (
@@ -16,7 +15,6 @@ const FormNavigation = ({ step, setStep, navConfig }: FormNavigationProps) => {
           key={item.id}
           navItem={item}
           isActive={step === item.id}
-          onClick={setStep}
         />
       ))}
     </div>

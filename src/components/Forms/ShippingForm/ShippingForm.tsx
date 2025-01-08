@@ -17,6 +17,15 @@ import {
 } from "@/components/ui/select";
 import { countries } from "@/constants";
 import { Checkbox } from "@/components/ui/checkbox";
+import CustomFormLabel from "@/components/Forms/CustomFormLabel/CustomFormLabel";
+
+const requiredFields = [
+  "shippingStreet1",
+  "shippingState",
+  "shippingCity",
+  "shippingZip",
+  "shippingCountry",
+];
 
 const ShippingForm = () => {
   const form = useFormContext();
@@ -70,7 +79,10 @@ const ShippingForm = () => {
         name="shippingStreet1"
         render={({ field }) => (
           <FormItem className="relative grow">
-            <FormLabel className="text-base font-medium">Street 1</FormLabel>
+            <CustomFormLabel
+              label="Street 1"
+              isRequired={requiredFields.includes(field.name)}
+            />
             <FormControl>
               <Input
                 {...field}
@@ -89,7 +101,10 @@ const ShippingForm = () => {
         name="shippingStreet2"
         render={({ field }) => (
           <FormItem className="relative grow">
-            <FormLabel className="text-base font-medium">Street 2</FormLabel>
+            <CustomFormLabel
+              label="Street 2"
+              isRequired={requiredFields.includes(field.name)}
+            />
             <FormControl>
               <Input
                 {...field}
@@ -109,7 +124,10 @@ const ShippingForm = () => {
           name="shippingState"
           render={({ field }) => (
             <FormItem className="relative grow">
-              <FormLabel className="text-base font-medium">State</FormLabel>
+              <CustomFormLabel
+                label="State"
+                isRequired={requiredFields.includes(field.name)}
+              />
               <FormControl>
                 <Input
                   {...field}
@@ -128,7 +146,10 @@ const ShippingForm = () => {
           name="shippingCity"
           render={({ field }) => (
             <FormItem className="relative grow self-end">
-              <FormLabel className="text-base font-medium">City</FormLabel>
+              <CustomFormLabel
+                label="City"
+                isRequired={requiredFields.includes(field.name)}
+              />
               <FormControl>
                 <Input
                   {...field}
@@ -148,7 +169,10 @@ const ShippingForm = () => {
         name="shippingZip"
         render={({ field }) => (
           <FormItem className="relative grow">
-            <FormLabel className="text-base font-medium">Zipcode</FormLabel>
+            <CustomFormLabel
+              label="Zipcode"
+              isRequired={requiredFields.includes(field.name)}
+            />
             <FormControl>
               <Input
                 {...field}
@@ -166,7 +190,10 @@ const ShippingForm = () => {
         name="shippingCountry"
         render={({ field }) => (
           <FormItem className="relative grow">
-            <FormLabel className="text-base font-medium">Country</FormLabel>
+            <CustomFormLabel
+              label="Country"
+              isRequired={requiredFields.includes(field.name)}
+            />
             <Select
               onValueChange={field.onChange}
               value={field.value}

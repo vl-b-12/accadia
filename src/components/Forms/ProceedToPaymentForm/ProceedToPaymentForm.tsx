@@ -1,4 +1,4 @@
-import React, { ChangeEvent } from "react";
+import React, { ChangeEvent, useEffect, useRef } from "react";
 import {
   FormControl,
   FormField,
@@ -18,6 +18,23 @@ import { Button } from "@/components/ui/button";
 import { clearCart } from "@/store/slices/CartSlice/cartSlice";
 import { formatPrice } from "@/lib/utils";
 
+const numberInputValidator = (
+  e: ChangeEvent<HTMLInputElement>,
+  field: ControllerRenderProps,
+  max = Infinity,
+  min = 0,
+) => {
+  let value = e.target.value;
+
+  if (value !== "0") {
+    value = value.replace(/^0+/, "");
+  }
+
+  const numericValue = Math.max(min, Math.min(Number(value) || min, max));
+
+  field.onChange(value === "" ? min.toString() : numericValue.toString());
+};
+
 const ProceedToPaymentForm = () => {
   const dispatch = useDispatch();
   const { totalPrice } = useSelector((state: RootState) => state.cart);
@@ -26,53 +43,47 @@ const ProceedToPaymentForm = () => {
   const amount = form.watch("amount");
   const tax = form.watch("tax");
 
+  const updatingRef = useRef(false);
+
+  const grandTotal = totalPrice - amount + tax;
+
   const { currencySymbol, price } = formatPrice(totalPrice);
+  const { price: grandTotalToShow } = formatPrice(grandTotal);
 
-  //TODO update calculations
+  const updateAmount = (newDiscount: number) => {
+    if (updatingRef.current) return;
+    updatingRef.current = true;
 
-  // const calculateGrandTotal = () => {
-  //   let grandTotal = totalPrice;
-  //
-  //   if (discount) {
-  //     const discountAmount = (discount / 100) * totalPrice;
-  //     grandTotal -= discountAmount;
-  //     form.setValue("amount", discountAmount);
-  //   }
-  //
-  //   if (amount) {
-  //     const discountPercentage = (amount / totalPrice) * 100;
-  //     grandTotal = totalPrice - amount;
-  //     form.setValue("discount", discountPercentage);
-  //   }
-  //
-  //   if (tax) {
-  //     grandTotal += tax;
-  //   }
-  //
-  //   return grandTotal;
-  // };
+    const discountAmount = (newDiscount * totalPrice) / 100;
+    form.setValue("amount", discountAmount);
 
-  // const { price: finalPrice } = formatPrice(calculateGrandTotal());
+    updatingRef.current = false;
+  };
+
+  const updateDiscount = (newAmount: number) => {
+    if (updatingRef.current) return;
+    updatingRef.current = true;
+
+    const discountPercentage = (newAmount / totalPrice) * 100;
+    form.setValue("discount", discountPercentage);
+
+    updatingRef.current = false;
+  };
+
+  useEffect(() => {
+    if (discount !== undefined && !updatingRef.current) {
+      updateAmount(discount);
+    }
+  }, [discount, totalPrice]);
+
+  useEffect(() => {
+    if (amount !== undefined && !updatingRef.current) {
+      updateDiscount(amount);
+    }
+  }, [amount, totalPrice]);
 
   const handleSubmit: SubmitHandler<FieldValues> = (_, e) => {
     e?.preventDefault();
-  };
-
-  const numberInputValidator = (
-    e: ChangeEvent<HTMLInputElement>,
-    field: ControllerRenderProps,
-    max = 100,
-    min = 0,
-  ) => {
-    let value = e.target.value;
-
-    if (value !== "0") {
-      value = value.replace(/^0+/, "");
-    }
-
-    const numericValue = Math.max(min, Math.min(Number(value) || min, max));
-
-    field.onChange(value === "" ? min.toString() : numericValue.toString());
   };
 
   return (
@@ -99,8 +110,8 @@ const ProceedToPaymentForm = () => {
                   <Input
                     {...field}
                     type="number"
-                    className="h-9 w-[74px] border-violent-40 px-4 text-xl font-medium"
-                    onChange={(e) => numberInputValidator(e, field)}
+                    className="h-9 w-[104px] xl:w-[74px] border-violent-40 px-4 text-xl font-medium"
+                    onChange={(e) => numberInputValidator(e, field, 100)}
                   />
                 </FormControl>
                 <FormMessage />
@@ -153,7 +164,7 @@ const ProceedToPaymentForm = () => {
         <div className="text-base font-medium">Grand Total:</div>
         <div className="text-[28px] font-bold">
           <span className="font-light">{currencySymbol}</span>
-          {"3000"}
+          {grandTotalToShow}
         </div>
       </div>
 

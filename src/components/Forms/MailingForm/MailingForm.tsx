@@ -3,7 +3,6 @@ import {
   FormControl,
   FormField,
   FormItem,
-  FormLabel,
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
@@ -16,6 +15,9 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { countries } from "@/constants";
+import CustomFormLabel from "@/components/Forms/CustomFormLabel/CustomFormLabel";
+
+const requiredFields = ["street1", "state", "city", "zip", "country"];
 
 const MailingForm = () => {
   const form = useFormContext();
@@ -27,7 +29,10 @@ const MailingForm = () => {
         name="street1"
         render={({ field }) => (
           <FormItem className="relative grow">
-            <FormLabel className="text-base font-medium">Street 1</FormLabel>
+            <CustomFormLabel
+              label="Street 1"
+              isRequired={requiredFields.includes(field.name)}
+            />
             <FormControl>
               <Input
                 {...field}
@@ -45,7 +50,10 @@ const MailingForm = () => {
         name="street2"
         render={({ field }) => (
           <FormItem className="relative grow">
-            <FormLabel className="text-base font-medium">Street 2</FormLabel>
+            <CustomFormLabel
+              label="Street 2"
+              isRequired={requiredFields.includes(field.name)}
+            />
             <FormControl>
               <Input
                 {...field}
@@ -64,7 +72,10 @@ const MailingForm = () => {
           name="state"
           render={({ field }) => (
             <FormItem className="relative grow">
-              <FormLabel className="text-base font-medium">State</FormLabel>
+              <CustomFormLabel
+                label="State"
+                isRequired={requiredFields.includes(field.name)}
+              />
               <FormControl>
                 <Input
                   {...field}
@@ -82,7 +93,10 @@ const MailingForm = () => {
           name="city"
           render={({ field }) => (
             <FormItem className="relative grow self-end">
-              <FormLabel className="text-base font-medium">City</FormLabel>
+              <CustomFormLabel
+                label="City"
+                isRequired={requiredFields.includes(field.name)}
+              />
               <FormControl>
                 <Input
                   {...field}
@@ -101,7 +115,10 @@ const MailingForm = () => {
         name="zip"
         render={({ field }) => (
           <FormItem className="relative grow">
-            <FormLabel className="text-base font-medium">Zipcode</FormLabel>
+            <CustomFormLabel
+              label="Zipcode"
+              isRequired={requiredFields.includes(field.name)}
+            />
             <FormControl>
               <Input
                 {...field}
@@ -119,7 +136,10 @@ const MailingForm = () => {
         name="country"
         render={({ field }) => (
           <FormItem className="relative grow">
-            <FormLabel className="text-base font-medium">Country</FormLabel>
+            <CustomFormLabel
+              label="Country"
+              isRequired={requiredFields.includes(field.name)}
+            />
             <Select onValueChange={field.onChange} defaultValue={field.value}>
               <FormControl className="text-base font-medium text-gray-70 placeholder:font-medium placeholder:text-gray-70">
                 <SelectTrigger className="h-[50px] w-full border border-violent-30">

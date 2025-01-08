@@ -29,7 +29,7 @@ const addCustomerSchemas: { [key: number]: z.ZodSchema } = {
   4: addCustomerSchemaPersonal,
 };
 
-const addCustomerDefaultValues = {
+const addCustomerDefaultValues: { [key: number]: { [key: string]: string } } = {
   1: {
     firstName: "",
     lastName: "",
@@ -105,6 +105,7 @@ const AddCustomerSection = () => {
             {step !== 4 ? (
               <>
                 <Button
+                  type="button"
                   variant="outline"
                   className="h-14 w-56 uppercase font-bold text-base border-violent-30 text-gray-70 hover:bg-violent-20 duration-300"
                   onClick={() => {

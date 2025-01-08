@@ -3,11 +3,13 @@ import {
   FormControl,
   FormField,
   FormItem,
-  FormLabel,
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { useFormContext } from "react-hook-form";
+import CustomFormLabel from "@/components/Forms/CustomFormLabel/CustomFormLabel";
+
+const requiredFields = ["firstName", "lastName", "email", "phone"];
 
 const AccountForm = () => {
   const form = useFormContext();
@@ -19,7 +21,10 @@ const AccountForm = () => {
         name="firstName"
         render={({ field }) => (
           <FormItem className="relative grow">
-            <FormLabel className="text-base font-medium">First Name</FormLabel>
+            <CustomFormLabel
+              label="First Name"
+              isRequired={requiredFields.includes(field.name)}
+            />
             <FormControl>
               <Input
                 {...field}
@@ -37,7 +42,10 @@ const AccountForm = () => {
         name="lastName"
         render={({ field }) => (
           <FormItem className="relative grow">
-            <FormLabel className="text-base font-medium">Last Name</FormLabel>
+            <CustomFormLabel
+              label="Last Name"
+              isRequired={requiredFields.includes(field.name)}
+            />
             <FormControl>
               <Input
                 {...field}
@@ -55,7 +63,10 @@ const AccountForm = () => {
         name="email"
         render={({ field }) => (
           <FormItem className="relative grow">
-            <FormLabel className="text-base font-medium">Email</FormLabel>
+            <CustomFormLabel
+              label="Email"
+              isRequired={requiredFields.includes(field.name)}
+            />
             <FormControl>
               <Input
                 {...field}
@@ -74,9 +85,10 @@ const AccountForm = () => {
         name="phone"
         render={({ field }) => (
           <FormItem className="relative grow">
-            <FormLabel className="text-base font-medium">
-              Phone Number
-            </FormLabel>
+            <CustomFormLabel
+              label="Phone Number"
+              isRequired={requiredFields.includes(field.name)}
+            />
             <FormControl>
               <Input
                 {...field}

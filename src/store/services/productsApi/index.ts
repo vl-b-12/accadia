@@ -2,7 +2,9 @@ import { REQUEST } from "@/store/storeTypes";
 import { BaseQueryMeta } from "@reduxjs/toolkit/query";
 import { apiRtk } from "../";
 
-interface QueryParams {}
+interface QueryParams {
+  test?: string;
+}
 
 export const productApi = apiRtk.injectEndpoints({
   endpoints: (build) => ({

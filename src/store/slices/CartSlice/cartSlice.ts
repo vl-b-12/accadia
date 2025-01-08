@@ -41,7 +41,7 @@ export const cartSlice = createSlice({
       state.tempFilters = mockProduct.filter((product) => {
         return Object.entries(payload).every(([key, value]) => {
           if (!value) return true;
-          return product[key]
+          return product[key as keyof Product]
             ?.toString()
             .toLowerCase()
             .includes(value.toString().toLowerCase());

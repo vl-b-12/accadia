@@ -16,11 +16,11 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
-import { useSignUpMutation } from "@/store/services/loginApi";
+// import { useSignUpMutation } from "@/store/services/loginApi";
 
 const LoginForm = () => {
   const { push } = useRouter();
-  const [signUp, { isError }] = useSignUpMutation();
+  // const [signUp, { isError }] = useSignUpMutation();
 
   const form = useForm<z.infer<typeof loginFormSchema>>({
     resolver: zodResolver(loginFormSchema),

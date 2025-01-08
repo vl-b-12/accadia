@@ -1,6 +1,6 @@
 "use client";
 
-import React, { ReactElement, useState } from "react";
+import React, { ReactElement, useEffect, useState } from "react";
 import FormNavigation from "@/components/FormNavigation/FormNavigation";
 import { addCustomerNavConfig } from "@/constants";
 import { Form } from "@/components/ui/form";
@@ -76,6 +76,13 @@ const AddCustomerSection = () => {
     resolver: zodResolver(addCustomerSchemas[step]),
     defaultValues: addCustomerDefaultValues[step],
   });
+
+  useEffect(() => {
+    form.reset({
+      ...form.getValues(),
+      ...addCustomerDefaultValues[step],
+    });
+  }, [step, form]);
 
   const handleSubmit: SubmitHandler<FieldValues> = (_, e) => {
     e?.preventDefault();

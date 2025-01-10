@@ -49,6 +49,8 @@ const ShippingForm = () => {
       form.setValue("shippingZip", "");
       form.setValue("shippingCountry", "");
     }
+
+    form.trigger(requiredFields);
   };
 
   return (
@@ -117,6 +119,28 @@ const ShippingForm = () => {
         )}
       />
 
+      <FormField
+        disabled={autoFill}
+        control={form.control}
+        name="shippingZip"
+        render={({ field }) => (
+          <FormItem className="relative grow">
+            <CustomFormLabel
+              label="Zipcode"
+              isRequired={requiredFields.includes(field.name)}
+            />
+            <FormControl>
+              <Input
+                {...field}
+                placeholder="Enter zipcode"
+                className="h-[50px] py-2 pr-8 placeholder:text-base placeholder:font-medium placeholder:capitalize placeholder:text-gray-70 grow-1 border-violent-30"
+              />
+            </FormControl>
+            <FormMessage />
+          </FormItem>
+        )}
+      />
+
       <div className="flex gap-3">
         <FormField
           disabled={autoFill}
@@ -162,28 +186,6 @@ const ShippingForm = () => {
           )}
         />
       </div>
-
-      <FormField
-        disabled={autoFill}
-        control={form.control}
-        name="shippingZip"
-        render={({ field }) => (
-          <FormItem className="relative grow">
-            <CustomFormLabel
-              label="Zipcode"
-              isRequired={requiredFields.includes(field.name)}
-            />
-            <FormControl>
-              <Input
-                {...field}
-                placeholder="Enter zipcode"
-                className="h-[50px] py-2 pr-8 placeholder:text-base placeholder:font-medium placeholder:capitalize placeholder:text-gray-70 grow-1 border-violent-30"
-              />
-            </FormControl>
-            <FormMessage />
-          </FormItem>
-        )}
-      />
 
       <FormField
         control={form.control}

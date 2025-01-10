@@ -20,7 +20,10 @@ import MailingForm from "@/components/Forms/MailingForm/MailingForm";
 import ShippingForm from "@/components/Forms/ShippingForm/ShippingForm";
 import PersonalForm from "@/components/Forms/PersonalForm/PersonalForm";
 import { useDispatch } from "react-redux";
-import { addCustomer } from "@/store/slices/CustomerSlice/customerslice";
+import {
+  addCustomer,
+  selectCustomer,
+} from "@/store/slices/CustomerSlice/customerslice";
 
 const addCustomerSchemas: { [key: number]: z.ZodSchema } = {
   1: addCustomerSchemaAccount,
@@ -68,7 +71,7 @@ const addCustomerFormConfig: { [key: number]: ReactElement } = {
 };
 
 const AddCustomerSection = () => {
-  const [step, setStep] = useState(1);
+  const [step, setStep] = useState(2);
   const { push } = useRouter();
   const dispatch = useDispatch();
 
@@ -91,10 +94,14 @@ const AddCustomerSection = () => {
       setStep((prev) => prev + 1);
     } else {
       const { firstName, lastName } = form.getValues();
-      dispatch(addCustomer({ name: `${firstName} ${lastName}` }));
+      const newCustomer = { name: `${firstName} ${lastName}` };
+      dispatch(addCustomer(newCustomer));
+      dispatch(selectCustomer(newCustomer));
       push("/cart");
     }
   };
+
+  console.log(form.formState.isValid, "formState");
 
   return (
     <div>
@@ -129,6 +136,7 @@ const AddCustomerSection = () => {
                   variant="primary"
                   className="h-14 uppercase w-56"
                   type="submit"
+                  disabled={!form.formState.isValid}
                 >
                   Next
                 </Button>

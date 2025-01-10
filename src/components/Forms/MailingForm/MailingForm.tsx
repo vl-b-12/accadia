@@ -66,6 +66,27 @@ const MailingForm = () => {
         )}
       />
 
+      <FormField
+        control={form.control}
+        name="zip"
+        render={({ field }) => (
+          <FormItem className="relative grow">
+            <CustomFormLabel
+              label="Zipcode"
+              isRequired={requiredFields.includes(field.name)}
+            />
+            <FormControl>
+              <Input
+                {...field}
+                placeholder="Enter zipcode"
+                className="h-[50px] py-2 pr-8 placeholder:text-base placeholder:font-medium placeholder:capitalize placeholder:text-gray-70 grow-1 border-violent-30"
+              />
+            </FormControl>
+            <FormMessage />
+          </FormItem>
+        )}
+      />
+
       <div className="flex gap-3">
         <FormField
           control={form.control}
@@ -109,27 +130,6 @@ const MailingForm = () => {
           )}
         />
       </div>
-
-      <FormField
-        control={form.control}
-        name="zip"
-        render={({ field }) => (
-          <FormItem className="relative grow">
-            <CustomFormLabel
-              label="Zipcode"
-              isRequired={requiredFields.includes(field.name)}
-            />
-            <FormControl>
-              <Input
-                {...field}
-                placeholder="Enter zipcode"
-                className="h-[50px] py-2 pr-8 placeholder:text-base placeholder:font-medium placeholder:capitalize placeholder:text-gray-70 grow-1 border-violent-30"
-              />
-            </FormControl>
-            <FormMessage />
-          </FormItem>
-        )}
-      />
 
       <FormField
         control={form.control}

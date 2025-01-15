@@ -19,9 +19,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body
-        className={`${montserrat.className} antialiased w-screen min-h-screen`}
-      >
+      <body className={`${montserrat.className} antialiased  min-h-screen`}>
         <Providers>
           <Header />
           {children}

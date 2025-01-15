@@ -25,8 +25,11 @@ const PaymentAmountInput = ({ type, name }: PaymentAmountInputProps) => {
   const { totalPrice, balanceDue, paid } = useSelector(
     (state: RootState) => state.cart,
   );
-  const balanceDueRef = useRef(balanceDue);
-  const prevAmount = useRef(0);
+  const initialInputValue = +(form.getValues(name) || 0);
+  const balanceDueRef = useRef(
+    balanceDue ? balanceDue + initialInputValue : initialInputValue,
+  );
+  const prevAmount = useRef(initialInputValue || 0);
   const amountRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -62,7 +65,7 @@ const PaymentAmountInput = ({ type, name }: PaymentAmountInputProps) => {
                 const balanceDueBeforeUpdate =
                   balanceDue + +prevAmount?.current;
 
-                if (+value > balanceDueBeforeUpdate && type === "split") {
+                if (+value >= balanceDueBeforeUpdate && type === "split") {
                   value = (balanceDueRef?.current || "")?.toString();
                 }
 

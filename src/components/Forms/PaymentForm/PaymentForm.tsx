@@ -28,7 +28,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/store/storeTypes";
 import { useRouter } from "next/navigation";
-import { setPaid } from "@/store/slices/CartSlice/cartSlice";
+import { clearCart, setPaid } from "@/store/slices/CartSlice/cartSlice";
 
 interface PaymentFormProps {
   type: PaymentType;
@@ -96,6 +96,7 @@ const PaymentForm = ({
 
   const handleSubmit = async () => {
     push("/generate-invoice");
+    dispatch(clearCart());
   };
 
   useEffect(() => {
@@ -104,7 +105,7 @@ const PaymentForm = ({
     if (isFullType) {
       dispatch(setPaid(0));
     }
-  }, [step, type]);
+  }, [step, type, isFullType]);
 
   return (
     <div className="mt-6">

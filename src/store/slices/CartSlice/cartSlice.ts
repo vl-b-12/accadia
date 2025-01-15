@@ -36,9 +36,7 @@ export const cartSlice = createSlice({
     deleteProductFromCart: (state, { payload: sku }) => {
       state.cart = state.cart.filter((cart) => cart.sku !== sku);
     },
-    clearCart: (state) => {
-      state.cart = [];
-    },
+    clearCart: () => initialState,
     setTax: (state, { payload }) => {
       state.tax = payload;
     },

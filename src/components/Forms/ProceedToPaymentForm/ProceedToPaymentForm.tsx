@@ -92,7 +92,7 @@ const ProceedToPaymentForm = () => {
   }, [totalPrice, amount, tax]);
 
   useEffect(() => {
-    dispatch(setTax(tax));
+    dispatch(setTax(+tax));
   }, [tax]);
 
   useEffect(() => {

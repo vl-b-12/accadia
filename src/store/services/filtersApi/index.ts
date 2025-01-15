@@ -1,0 +1,29 @@
+import { REQUEST } from "@/store/storeTypes";
+import { apiRtk } from "../";
+
+interface Collection {
+  id: string;
+  name: string;
+}
+
+type JewelryTypes = Collection;
+
+//TODO update spelling
+
+interface FiltersResponse {
+  collections: Collection[];
+  jewelryTypes: JewelryTypes[];
+}
+
+export const filtersApi = apiRtk.injectEndpoints({
+  endpoints: (build) => ({
+    getFilters: build.query<FiltersResponse, void>({
+      query: () => ({
+        url: "/catalog/filters",
+        method: REQUEST.GET,
+      }),
+    }),
+  }),
+});
+
+export const { useLazyGetFiltersQuery } = filtersApi;

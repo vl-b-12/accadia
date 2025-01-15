@@ -15,10 +15,12 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/store/storeTypes";
 import { Button } from "@/components/ui/button";
-import { clearCart } from "@/store/slices/CartSlice/cartSlice";
+import { clearCart, setTax } from "@/store/slices/CartSlice/cartSlice";
 import { formatPrice } from "@/lib/utils";
+import { useRouter } from "next/navigation";
 
 const ProceedToPaymentForm = () => {
+  const { push } = useRouter();
   const dispatch = useDispatch();
   const [isUpdating, setIsUpdating] = useState<"discount" | "amount" | null>(
     null,
@@ -30,7 +32,7 @@ const ProceedToPaymentForm = () => {
   const amount = form.watch("amount");
   const tax = form.watch("tax");
 
-  const { currencySymbol, price } = formatPrice(totalPrice);
+  const { currencySymbol, price } = formatPrice(totalPrice?.toString());
 
   const handleSubmit: SubmitHandler<FieldValues> = (_, e) => {
     e?.preventDefault();
@@ -56,7 +58,7 @@ const ProceedToPaymentForm = () => {
     }
 
     const numericValue = Math.max(min, Math.min(Number(value) || min, max));
-    field.onChange(value === "" ? min.toString() : numericValue.toString());
+    field.onChange(value === "" ? min?.toString() : numericValue?.toString());
 
     if (changed) {
       setIsInputChanged(true);
@@ -78,13 +80,28 @@ const ProceedToPaymentForm = () => {
     field.onChange(value === "" ? min.toString() : numericValue.toString());
   };
 
+  const grandTotal = useMemo(() => {
+    let total = totalPrice;
+    if (amount) {
+      total -= Number(amount);
+    }
+    if (tax) {
+      total += Number(tax);
+    }
+    return total;
+  }, [totalPrice, amount, tax]);
+
+  useEffect(() => {
+    dispatch(setTax(tax));
+  }, [tax]);
+
   useEffect(() => {
     if (isUpdating !== "amount" && discount && isInputChanged) {
       setIsUpdating("discount");
       const calculatedAmount = (Number(discount) / 100) * totalPrice;
       const finalAmount = Number.isInteger(calculatedAmount)
-        ? calculatedAmount.toString()
-        : calculatedAmount.toFixed(2);
+        ? calculatedAmount?.toString()
+        : calculatedAmount?.toFixed(2);
 
       form.setValue("amount", finalAmount);
       setIsUpdating(null);
@@ -105,17 +122,6 @@ const ProceedToPaymentForm = () => {
       setIsInputChanged(false);
     }
   }, [amount, totalPrice, form.setValue, isUpdating]);
-
-  const grandTotal = useMemo(() => {
-    let total = totalPrice;
-    if (amount) {
-      total -= Number(amount);
-    }
-    if (tax) {
-      total += Number(tax);
-    }
-    return total;
-  }, [totalPrice, amount, tax]);
 
   return (
     <form
@@ -209,7 +215,11 @@ const ProceedToPaymentForm = () => {
       </div>
 
       <div className="flex flex-col gap-4">
-        <Button variant="primary" className="h-14 uppercase">
+        <Button
+          variant="primary"
+          className="h-14 uppercase"
+          onClick={() => push("/payment")}
+        >
           Proceed
         </Button>
         <Button

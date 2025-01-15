@@ -1,5 +1,4 @@
 import { REQUEST } from "@/store/storeTypes";
-import { BaseQueryMeta } from "@reduxjs/toolkit/query";
 import { apiRtk } from "../";
 
 interface SignUp {
@@ -17,21 +16,10 @@ export const loginApi = apiRtk.injectEndpoints({
   endpoints: (build) => ({
     signUp: build.mutation<SignUpResponse, SignUp>({
       query: (props: SignUp) => ({
-        url: "/api/users/login",
+        url: "/users/login",
         method: REQUEST.POST,
         body: props,
       }),
-      transformErrorResponse: (
-        error: unknown,
-        meta: BaseQueryMeta<never>,
-        arg: unknown,
-      ) => {
-        console.log("log TRK Query ERROR transformErrorResponse ", {
-          error,
-          meta,
-          arg,
-        });
-      },
     }),
   }),
 });

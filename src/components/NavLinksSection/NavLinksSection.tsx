@@ -12,8 +12,8 @@ const NavLinksSection = () => {
       <NavLink
         href="/"
         text="Catalog"
-        iconWidth={32}
-        iconHeight={32}
+        iconWidth={24}
+        iconHeight={24}
         icon="/icons/ring-icon.svg"
         activeIcon="/icons/ring-icon-active.svg"
         isActive={pathname === "/"}
@@ -24,6 +24,8 @@ const NavLinksSection = () => {
         icon="/icons/user-icon.svg"
         activeIcon="/icons/user-icon-active.svg"
         isActive={pathname === "/customers"}
+        iconWidth={18}
+        iconHeight={18}
       />
     </div>
   );

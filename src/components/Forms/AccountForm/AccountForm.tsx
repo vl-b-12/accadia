@@ -9,7 +9,7 @@ import { Input } from "@/components/ui/input";
 import { useFormContext } from "react-hook-form";
 import CustomFormLabel from "@/components/Forms/CustomFormLabel/CustomFormLabel";
 
-const requiredFields = ["firstName", "lastName", "email", "phone"];
+const requiredFields = ["firstName", "lastName", "email", "phoneNumber"];
 
 const AccountForm = () => {
   const form = useFormContext();
@@ -82,7 +82,7 @@ const AccountForm = () => {
 
       <FormField
         control={form.control}
-        name="phone"
+        name="phoneNumber"
         render={({ field }) => (
           <FormItem className="relative grow">
             <CustomFormLabel

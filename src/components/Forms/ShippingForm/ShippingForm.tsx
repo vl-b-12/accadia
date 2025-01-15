@@ -23,13 +23,14 @@ const requiredFields = [
   "shippingStreet1",
   "shippingState",
   "shippingCity",
-  "shippingZip",
+  "shippingZipCode",
   "shippingCountry",
 ];
 
 const ShippingForm = () => {
   const form = useFormContext();
   const autoFill = form.watch("sameAsMailing");
+  const hasRequiredFields = form.getValues("zipCode");
 
   const handleCheckboxChange = (checked: boolean) => {
     form.setValue("sameAsMailing", checked);
@@ -39,14 +40,14 @@ const ShippingForm = () => {
       form.setValue("shippingStreet2", form.getValues("street2"));
       form.setValue("shippingState", form.getValues("state"));
       form.setValue("shippingCity", form.getValues("city"));
-      form.setValue("shippingZip", form.getValues("zip"));
+      form.setValue("shippingZipCode", form.getValues("zipCode"));
       form.setValue("shippingCountry", form.getValues("country"));
     } else {
       form.setValue("shippingStreet1", "");
       form.setValue("shippingStreet2", "");
       form.setValue("shippingState", "");
       form.setValue("shippingCity", "");
-      form.setValue("shippingZip", "");
+      form.setValue("shippingZipCode", "");
       form.setValue("shippingCountry", "");
     }
 
@@ -62,6 +63,7 @@ const ShippingForm = () => {
           <FormItem className="relative flex itams-center gap-3 grow">
             <FormControl>
               <Checkbox
+                disabled={!hasRequiredFields}
                 checked={field.value}
                 onCheckedChange={(checked) =>
                   handleCheckboxChange(checked as boolean)
@@ -122,7 +124,7 @@ const ShippingForm = () => {
       <FormField
         disabled={autoFill}
         control={form.control}
-        name="shippingZip"
+        name="shippingZipCode"
         render={({ field }) => (
           <FormItem className="relative grow">
             <CustomFormLabel

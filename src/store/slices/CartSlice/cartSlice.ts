@@ -1,13 +1,14 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { CartProduct, Product } from "@/types/types";
-import { mockProduct } from "../../../../mocks/mockProduct";
+import { CartProduct } from "@/types/types";
 
 interface CartState {
   cart: CartProduct[];
   totalPrice: number;
   totalQnt: number;
+  tax: number;
   karatsBreakdown: KaratsBreakdown[] | null;
-  tempFilters: Product[];
+  paid: number;
+  balanceDue: number;
 }
 
 interface KaratsBreakdown {
@@ -19,8 +20,10 @@ const initialState: CartState = {
   cart: [],
   totalPrice: 0,
   totalQnt: 0,
+  tax: 0,
   karatsBreakdown: null,
-  tempFilters: [],
+  paid: 0,
+  balanceDue: 0,
 };
 
 export const cartSlice = createSlice({
@@ -30,23 +33,18 @@ export const cartSlice = createSlice({
     addProductToCart: (state, { payload }) => {
       state.cart.push({ ...payload });
     },
-    deleteProductFromCart: (state, { payload: id }) => {
-      state.cart = state.cart.filter((cart) => cart.id !== id);
+    deleteProductFromCart: (state, { payload: sku }) => {
+      state.cart = state.cart.filter((cart) => cart.sku !== sku);
     },
     clearCart: (state) => {
       state.cart = [];
     },
-
-    addTempFilters: (state, { payload }) => {
-      state.tempFilters = mockProduct.filter((product) => {
-        return Object.entries(payload).every(([key, value]) => {
-          if (!value) return true;
-          return product[key as keyof Product]
-            ?.toString()
-            .toLowerCase()
-            .includes(value.toString().toLowerCase());
-        });
-      });
+    setTax: (state, { payload }) => {
+      state.tax = payload;
+    },
+    setPaid: (state, { payload }) => {
+      state.balanceDue = Number((state.totalPrice - payload).toFixed(2));
+      state.paid = payload;
     },
   },
   extraReducers: (builder) => {
@@ -85,7 +83,8 @@ export const {
   addProductToCart,
   clearCart,
   deleteProductFromCart,
-  addTempFilters,
+  setTax,
+  setPaid,
 } = cartSlice.actions;
 
 export default cartSlice.reducer;

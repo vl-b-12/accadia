@@ -9,13 +9,14 @@ import { Input } from "@/components/ui/input";
 import {
   clearSelectedCustomer,
   selectCustomer,
-} from "@/store/slices/CustomerSlice/customerslice";
+} from "@/store/slices/CustomerSlice/customerSlice";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { FieldValues, SubmitHandler, useFormContext } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/store/storeTypes";
 import { useRouter } from "next/navigation";
+import { useGetCustomersQuery } from "@/store/services/customersApi";
 
 interface SelectCustomerFormProps {
   setStep: (step: number) => void;
@@ -24,16 +25,17 @@ interface SelectCustomerFormProps {
 const SelectCustomerForm = ({ setStep }: SelectCustomerFormProps) => {
   const { push } = useRouter();
   const dispatch = useDispatch();
-  const { customers, selectedCustomer } = useSelector(
+  const { selectedCustomer } = useSelector(
     (state: RootState) => state.customer,
   );
 
+  const { data: customers } = useGetCustomersQuery();
+
   const form = useFormContext();
+  const customerQuery = form.watch("fullName");
 
-  const customerName = form.watch("name");
-
-  const customersToShow = customers.filter((customer) =>
-    customer.name?.toLowerCase().includes(customerName.toLowerCase()),
+  const customersToShow = customers?.filter((customer) =>
+    customer.fullName?.toLowerCase().includes(customerQuery?.toLowerCase()),
   );
 
   const handleSubmit: SubmitHandler<FieldValues> = (_, e) => {
@@ -49,7 +51,7 @@ const SelectCustomerForm = ({ setStep }: SelectCustomerFormProps) => {
       <div className="flex gap-2.5">
         <FormField
           control={form.control}
-          name="name"
+          name="fullName"
           render={({ field }) => (
             <FormItem className="relative grow">
               <FormControl>
@@ -75,7 +77,7 @@ const SelectCustomerForm = ({ setStep }: SelectCustomerFormProps) => {
                   height={16}
                   onClick={() => {
                     dispatch(clearSelectedCustomer());
-                    form.resetField("name");
+                    form.resetField("fullName");
                   }}
                 />
               )}
@@ -100,18 +102,18 @@ const SelectCustomerForm = ({ setStep }: SelectCustomerFormProps) => {
       >
         Proceed
       </Button>
-      {customerName && !!customersToShow.length && !selectedCustomer && (
+      {customerQuery && !!customersToShow?.length && !selectedCustomer && (
         <ul className="absolute top-20 left-4 flex flex-col gap-2.5 w-[calc(100%-32px)] py-2 px-4 border border-violent-30 bg-white rounded-md">
-          {customersToShow.map((customer) => (
+          {customersToShow?.map((customer) => (
             <li
               key={customer.id}
               className="px-1.5 py-0.5 font-medium text-gray-70 hover:bg-violent-20 hover:rounded-md cursor-pointer duration-300"
               onClick={() => {
-                form.setValue("name", customer.name);
+                form.setValue("fullName", customer.fullName);
                 dispatch(selectCustomer(customer));
               }}
             >
-              {customer.name}
+              {customer.fullName}
             </li>
           ))}
         </ul>

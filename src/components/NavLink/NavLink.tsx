@@ -16,7 +16,7 @@ const NavLink = ({
   isActive = false,
   text,
   icon,
-  iconWidth = 22,
+  iconWidth = 24,
   iconHeight = 24,
   activeIcon,
   href,
@@ -26,7 +26,7 @@ const NavLink = ({
     <Link
       href={href}
       className={cn(
-        "flex gap-3 items-center justify-center h-[66px] py-4 px-8 rounded-md",
+        "flex gap-3 items-center justify-center h-[50px] py-4 px-8 rounded-md self-center",
         { "bg-violent-90 text-gray-0": isActive },
       )}
       {...props}

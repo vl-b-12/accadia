@@ -12,7 +12,7 @@ interface TotalBreakdownProps {
 const TotalBreakdown = ({ step }: TotalBreakdownProps) => {
   const cart = useSelector((state: RootState) => state.cart);
 
-  const { currencySymbol, price } = formatPrice(cart.totalPrice);
+  const { currencySymbol, price } = formatPrice(cart.totalPrice?.toString());
 
   return (
     <div className="flex flex-col gap-6">

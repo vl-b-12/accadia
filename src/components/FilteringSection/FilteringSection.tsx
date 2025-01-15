@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import Image from "next/image";
-import { cn } from "@/lib/utils";
+import { cleanFilters, cn } from "@/lib/utils";
 import { useForm } from "react-hook-form";
 import {
   Form,
@@ -17,8 +17,15 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { useDispatch } from "react-redux";
-import { addTempFilters } from "@/store/slices/CartSlice/cartSlice";
+import { useLazyGetFiltersQuery } from "@/store/services/filtersApi";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  clearSelectedFilters,
+  selectFilter,
+} from "@/store/slices/FilterSlice/filterSlice";
+import { RootState } from "@/store/storeTypes";
+import { Filters } from "@/types/types";
+import { useDebounce } from "@/hooks/useDebounce";
 
 interface FilteringSectionProps {
   isOpen: boolean;
@@ -30,6 +37,7 @@ const filterInputStyle =
 
 const FilteringSection = ({ isOpen, setOpen }: FilteringSectionProps) => {
   const dispatch = useDispatch();
+  const { selectedFilters } = useSelector((state: RootState) => state.filter);
 
   const form = useForm({
     defaultValues: {
@@ -37,19 +45,38 @@ const FilteringSection = ({ isOpen, setOpen }: FilteringSectionProps) => {
       sku: "",
       collection: "",
       name: "",
-      type: "",
+      jewelryType: "",
     },
   });
 
-  //TODO delete later
-
-  const { watch } = form;
-
-  const watchAllFields = watch();
+  const watchAllFields = form.watch();
+  const debouncedFilters = useDebounce(watchAllFields, 300);
 
   useEffect(() => {
-    dispatch(addTempFilters(watchAllFields));
-  }, [watchAllFields]);
+    const cleanedFilters = cleanFilters(debouncedFilters);
+
+    const isFilterCountChange =
+      Object.keys(cleanedFilters).length !==
+      Object.keys(selectedFilters || {}).length;
+    const isFilterValueChanged = Object.entries(cleanedFilters || {}).some(
+      ([key, value]) => value !== selectedFilters?.[key as keyof Filters],
+    );
+    if (isFilterCountChange || isFilterValueChanged) {
+      dispatch(selectFilter(cleanedFilters));
+    }
+  }, [debouncedFilters, selectedFilters]);
+
+  const [getFilters, { data }] = useLazyGetFiltersQuery();
+
+  const handleFiltersOpen = async () => {
+    setOpen(!isOpen);
+    if (!isOpen) {
+      await getFilters();
+    } else {
+      form.reset();
+      dispatch(clearSelectedFilters());
+    }
+  };
 
   return (
     <div
@@ -96,13 +123,13 @@ const FilteringSection = ({ isOpen, setOpen }: FilteringSectionProps) => {
 
             <FormField
               control={form.control}
-              name="collection"
+              name="name"
               render={({ field }) => (
                 <FormItem className="grow">
                   <FormControl>
                     <Input
                       {...field}
-                      placeholder="Collection"
+                      placeholder="Jewelry Name"
                       className={filterInputStyle}
                     />
                   </FormControl>
@@ -113,20 +140,29 @@ const FilteringSection = ({ isOpen, setOpen }: FilteringSectionProps) => {
 
             <FormField
               control={form.control}
-              name="name"
+              name="collection"
               render={({ field }) => (
                 <FormItem className="grow">
                   <Select
-                    onValueChange={field.onChange}
-                    defaultValue={field.value}
+                    onValueChange={(value) =>
+                      field.onChange(value === "Collection" ? null : value)
+                    }
                   >
                     <FormControl>
                       <SelectTrigger>
-                        <SelectValue placeholder="Jewelry Name" />
+                        <SelectValue placeholder="Collection" />
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      <SelectItem value="Sleipnir">Sleipnir</SelectItem>
+                      <SelectItem value="Collection">Collection</SelectItem>
+                      {data?.collections.map((collectionItem, id) => (
+                        <SelectItem
+                          key={`${collectionItem.id}_${id}`}
+                          value={collectionItem.name}
+                        >
+                          {collectionItem.name}
+                        </SelectItem>
+                      ))}
                     </SelectContent>
                   </Select>
                 </FormItem>
@@ -135,12 +171,13 @@ const FilteringSection = ({ isOpen, setOpen }: FilteringSectionProps) => {
 
             <FormField
               control={form.control}
-              name="type"
+              name="jewelryType"
               render={({ field }) => (
                 <FormItem className="grow">
                   <Select
-                    onValueChange={field.onChange}
-                    defaultValue={field.value}
+                    onValueChange={(value) =>
+                      field.onChange(value === "jewelry type" ? null : value)
+                    }
                   >
                     <FormControl>
                       <SelectTrigger>
@@ -148,7 +185,12 @@ const FilteringSection = ({ isOpen, setOpen }: FilteringSectionProps) => {
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      <SelectItem value="Ring">Ring</SelectItem>
+                      <SelectItem value="jewelry type">Jewelry Type</SelectItem>
+                      {data?.jewelryTypes?.map((type, id) => (
+                        <SelectItem key={`${type.id}_${id}`} value={type.id}>
+                          {type.name}
+                        </SelectItem>
+                      ))}
                     </SelectContent>
                   </Select>
                 </FormItem>
@@ -162,10 +204,7 @@ const FilteringSection = ({ isOpen, setOpen }: FilteringSectionProps) => {
         className={cn(
           "flex items-center justify-center size-[66px] rounded-md",
         )}
-        onClick={() => {
-          setOpen(!isOpen);
-          form.reset();
-        }}
+        onClick={handleFiltersOpen}
       >
         <Image
           src="/icons/filter-icon.svg"

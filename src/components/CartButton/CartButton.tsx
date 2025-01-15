@@ -5,7 +5,7 @@ import { cn } from "@/lib/utils";
 import { usePathname, useRouter } from "next/navigation";
 import CartIcon from "@/components/CartButton/CartIcon/CartIcon";
 
-const cartPages = ["/cart", "/add-customer"];
+const cartPages = ["/cart", "/add-customer", "/payment"];
 
 const CartButton = () => {
   const quantity = useSelector((state: RootState) => state.cart.totalQnt);

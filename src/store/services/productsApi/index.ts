@@ -1,32 +1,35 @@
 import { REQUEST } from "@/store/storeTypes";
-import { BaseQueryMeta } from "@reduxjs/toolkit/query";
 import { apiRtk } from "../";
+import { Product } from "@/types/types";
 
-interface QueryParams {
-  test?: string;
+export interface ProductsResponse {
+  items: Product[];
+  page: number;
+  hasNextPage: boolean;
+  pageSize: number;
+  totalCount: number;
+  totalPages: number;
 }
 
-export const productApi = apiRtk.injectEndpoints({
+interface ProductsQuery {
+  page?: number;
+  sku?: string;
+  code?: string;
+  collection?: string;
+  name?: string;
+  jewelryType?: string;
+}
+
+export const productsApi = apiRtk.injectEndpoints({
   endpoints: (build) => ({
-    getProducts: build.query<QueryParams, QueryParams>({
-      query: (props: QueryParams) => ({
-        url: "/api/catalog",
+    getProducts: build.query<ProductsResponse, ProductsQuery>({
+      query: ({ page, sku, code, collection, name, jewelryType }) => ({
+        url: "/catalog",
         method: REQUEST.GET,
-        params: props,
+        params: { page, sku, code, collection, name, jewelryType },
       }),
-      transformErrorResponse: (
-        error: unknown,
-        meta: BaseQueryMeta<never>,
-        arg: unknown,
-      ) => {
-        console.log("log TRK Query ERROR transformErrorResponse ", {
-          error,
-          meta,
-          arg,
-        });
-      },
     }),
   }),
 });
 
-export const { useGetProductsQuery } = productApi;
+export const { useGetProductsQuery } = productsApi;

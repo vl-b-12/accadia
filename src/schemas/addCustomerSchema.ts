@@ -15,12 +15,12 @@ export const addCustomerSchemaAccount = z.object({
     .nonempty({
       message: "Email is required",
     }),
-  phone: z.string().nonempty({
+  phoneNumber: z.string().nonempty({
     message: "Phone is required",
   }),
 });
 
-export const addCustomerSchemaMailing = z.object({
+export const addCustomerSchemaBilling = z.object({
   street1: z.string().nonempty({
     message: "Street is required",
   }),
@@ -31,7 +31,7 @@ export const addCustomerSchemaMailing = z.object({
   city: z.string().nonempty({
     message: "City is required",
   }),
-  zip: z.string().nonempty({
+  zipCode: z.string().nonempty({
     message: "Zip is required",
   }),
   country: z.string().nonempty({
@@ -50,7 +50,7 @@ export const addCustomerSchemaShipping = z.object({
   shippingCity: z.string().nonempty({
     message: "City is required",
   }),
-  shippingZip: z.string().nonempty({
+  shippingZipCode: z.string().nonempty({
     message: "Zip is required",
   }),
   shippingCountry: z.string().nonempty({

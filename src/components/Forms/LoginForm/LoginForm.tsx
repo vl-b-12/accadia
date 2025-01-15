@@ -16,11 +16,14 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
-// import { useSignUpMutation } from "@/store/services/loginApi";
+import { useSignUpMutation } from "@/store/services/loginApi";
+import { useDispatch } from "react-redux";
+import { clearCart } from "@/store/slices/CartSlice/cartSlice";
 
 const LoginForm = () => {
+  const dispatch = useDispatch();
   const { push } = useRouter();
-  // const [signUp, { isError }] = useSignUpMutation();
+  const [signUp, { isLoading, isError }] = useSignUpMutation();
 
   const form = useForm<z.infer<typeof loginFormSchema>>({
     resolver: zodResolver(loginFormSchema),
@@ -31,9 +34,13 @@ const LoginForm = () => {
   });
 
   const handleSubmit = async (data: z.infer<typeof loginFormSchema>) => {
-    console.log(data);
-    push("/");
-    sessionStorage.setItem("isLoggedIn", "true");
+    const response = await signUp(data).unwrap();
+
+    if (response.accessToken) {
+      sessionStorage.setItem("accessToken", response.accessToken);
+      dispatch(clearCart());
+      push("/");
+    }
   };
 
   return (
@@ -76,9 +83,21 @@ const LoginForm = () => {
             )}
           />
 
-          <Button type="submit" variant="primary" size="primary">
-            Login
-          </Button>
+          <div className="flex flex-col gap-2">
+            <Button
+              type="submit"
+              variant="primary"
+              size="primary"
+              disabled={isLoading}
+            >
+              Login
+            </Button>
+            {isError && (
+              <div className="self-center text-red-600">
+                Wrong email or password
+              </div>
+            )}
+          </div>
         </form>
 
         <div className="flex gap-4">

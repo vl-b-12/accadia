@@ -1,18 +1,15 @@
-interface ProductCharacteristic {
-  id: number;
-  name: string;
-  description: string;
-}
-
 export interface Product {
-  id: number;
   collection: string;
+  description: string;
+  goldWeight: number;
+  image: string;
+  jewelryType: string;
   name: string;
-  karats: string;
-  characteristics: ProductCharacteristic[];
   price: number;
   sku: string;
-  image: string;
+  descriptionData: string[];
+  //TODO update later karats value
+  karats: string;
 }
 
 export interface CartProduct extends Product {
@@ -30,4 +27,29 @@ export interface NavItem {
   id: number;
   name: string;
   icon: string;
+  dataKey?: string;
 }
+
+export interface Customer {
+  id: number;
+  firstName: string;
+  lastName: string;
+  email: string;
+  phoneNumber: string;
+  country: string;
+  city: string;
+  state: string;
+  dob: string;
+  fullName: string;
+}
+
+export interface Filters {
+  page?: number;
+  sku?: string;
+  code?: string;
+  collection?: string;
+  name?: string;
+  jewelryType?: string;
+}
+
+export type PaymentType = "full" | "split";

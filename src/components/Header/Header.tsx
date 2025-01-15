@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import logo from "../../../app/icon.svg";
 import NavLinksSection from "@/components/NavLinksSection/NavLinksSection";
@@ -16,11 +16,20 @@ const Header = () => {
   const { push } = useRouter();
   const pathname = usePathname();
 
+  useEffect(() => {
+    if (pathname !== "/") {
+      setIsFiltersSectionOpen(false);
+    }
+  }, [pathname]);
+
   if (noHeaderPaths.includes(pathname)) return null;
 
   return (
     <div className="fixed top-0 left-0 z-40 w-full bg-gray-0 flex gap-8 justify-between py-3 px-6 h-[90px]">
-      <div className="flex gap-8 shrink-0">
+      <div
+        className="flex gap-8 shrink-0 cursor-pointer"
+        onClick={() => push("/")}
+      >
         <Image src={logo} alt="Accadia Icon" width={60} height={62} />
         {!isFiltersSectionOpen && <NavLinksSection />}
       </div>
@@ -30,16 +39,19 @@ const Header = () => {
           "justify-end w-full": isFiltersSectionOpen,
         })}
       >
-        <FilteringSection
-          isOpen={isFiltersSectionOpen}
-          setOpen={setIsFiltersSectionOpen}
-        />
+        {pathname == "/" && (
+          <FilteringSection
+            isOpen={isFiltersSectionOpen}
+            setOpen={setIsFiltersSectionOpen}
+          />
+        )}
+
         <div className="flex items-center gap-6">
           <CartButton />
           <div
             className="flex items-center justify-center size-[66px] rounded-md bg-gray-10"
             onClick={() => {
-              sessionStorage.removeItem("isLoggedIn");
+              sessionStorage.removeItem("accessToken");
               push("/login");
             }}
           >

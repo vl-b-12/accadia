@@ -8,7 +8,7 @@ import { RootState } from "@/store/storeTypes";
 import SelectCustomerForm from "@/components/Forms/SelectCustomerForm/SelectCustomerForm";
 import ProceedToPaymentForm from "@/components/Forms/ProceedToPaymentForm/ProceedToPaymentForm";
 import Image from "next/image";
-import { clearSelectedCustomer } from "@/store/slices/CustomerSlice/customerslice";
+import { clearSelectedCustomer } from "@/store/slices/CustomerSlice/customerSlice";
 
 interface SelectCustomerProps {
   step: number;
@@ -24,7 +24,7 @@ const SelectCustomer = ({ step, setStep }: SelectCustomerProps) => {
 
   const form = useForm({
     defaultValues: {
-      name: "",
+      fullName: "",
       discount: 0,
       amount: 0,
       tax: 0,
@@ -33,7 +33,7 @@ const SelectCustomer = ({ step, setStep }: SelectCustomerProps) => {
 
   useEffect(() => {
     if (selectedCustomer) {
-      form.setValue("name", selectedCustomer.name);
+      form.setValue("fullName", selectedCustomer.fullName);
     }
   }, [selectedCustomer]);
 
@@ -54,7 +54,7 @@ const SelectCustomer = ({ step, setStep }: SelectCustomerProps) => {
                     height={16}
                   />
                   <div className="text-base font-medium">
-                    {selectedCustomer?.name}
+                    {selectedCustomer?.fullName}
                   </div>
                 </div>
                 <div className="flex items-center gap-6">
@@ -66,7 +66,7 @@ const SelectCustomer = ({ step, setStep }: SelectCustomerProps) => {
                     onClick={() => {
                       dispatch(clearSelectedCustomer());
                       setStep(1);
-                      form.resetField("name");
+                      form.resetField("fullName");
                     }}
                     className="cursor-pointer"
                   />

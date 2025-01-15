@@ -44,7 +44,7 @@ const PersonalForm = () => {
 
       <FormField
         control={form.control}
-        name="annversary"
+        name="anniversary"
         render={({ field }) => (
           <FormItem className="relative grow">
             <FormLabel className="text-base font-medium">Anniversary</FormLabel>

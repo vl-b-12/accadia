@@ -17,9 +17,9 @@ import {
 import { countries } from "@/constants";
 import CustomFormLabel from "@/components/Forms/CustomFormLabel/CustomFormLabel";
 
-const requiredFields = ["street1", "state", "city", "zip", "country"];
+const requiredFields = ["street1", "state", "city", "zipCode", "country"];
 
-const MailingForm = () => {
+const BillingForm = () => {
   const form = useFormContext();
 
   return (
@@ -68,7 +68,7 @@ const MailingForm = () => {
 
       <FormField
         control={form.control}
-        name="zip"
+        name="zipCode"
         render={({ field }) => (
           <FormItem className="relative grow">
             <CustomFormLabel
@@ -162,4 +162,4 @@ const MailingForm = () => {
   );
 };
 
-export default MailingForm;
+export default BillingForm;

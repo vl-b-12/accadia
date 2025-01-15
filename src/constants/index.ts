@@ -1,10 +1,32 @@
 import { NavItem } from "@/types/types";
 
 export const addCustomerNavConfig: NavItem[] = [
-  { id: 1, name: "Account", icon: "/icons/customer-icon.svg" },
-  { id: 2, name: "Mailing", icon: "/icons/mail-icon.svg" },
+  { id: 1, name: "Profile", icon: "/icons/customer-icon.svg" },
+  { id: 2, name: "Billing", icon: "/icons/mail-icon.svg" },
   { id: 3, name: "Shipping", icon: "/icons/shipping-icon.svg" },
   { id: 4, name: "Personal", icon: "/icons/personal-icon.svg" },
+];
+
+export const paymentNavConfig: NavItem[] = [
+  {
+    id: 1,
+    name: "Credit Card",
+    icon: "/icons/wallet-icon.svg",
+    dataKey: "creditCardAmount",
+  },
+  {
+    id: 2,
+    name: "Check",
+    icon: "/icons/check-icon.svg",
+    dataKey: "checkAmount",
+  },
+  { id: 3, name: "Cash", icon: "/icons/cash-icon.svg", dataKey: "cashAmount" },
+  {
+    id: 4,
+    name: "Wire Transfer",
+    icon: "/icons/wire-transfer-icon.svg",
+    dataKey: "wireTransferAmount",
+  },
 ];
 
 export const countries: { code: string; name: string }[] = [

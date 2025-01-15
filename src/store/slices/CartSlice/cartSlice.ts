@@ -58,6 +58,7 @@ export const cartSlice = createSlice({
           (total, product) => total + product.price,
           0,
         );
+        state.balanceDue = state.totalPrice;
         state.totalQnt = state.cart.length;
         state.karatsBreakdown = state.cart.reduce<KaratsBreakdown[]>(
           (acc, product) => {

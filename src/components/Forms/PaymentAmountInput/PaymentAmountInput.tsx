@@ -49,6 +49,7 @@ const PaymentAmountInput = ({ type, name }: PaymentAmountInputProps) => {
             <Input
               {...field}
               ref={amountRef}
+              autoComplete="off"
               placeholder="Enter amount"
               className="h-[50px] text-xl font-semibold py-2 pr-8 placeholder:text-base placeholder:font-medium placeholder:capitalize placeholder:text-gray-70 grow-1 border-violent-30 focus-visible:ring-0 focus-visible:ring-offset-0 focus-visible:border-violent-40"
               onChange={(e) => {
@@ -58,10 +59,11 @@ const PaymentAmountInput = ({ type, name }: PaymentAmountInputProps) => {
                   value = totalPrice?.toString();
                 }
 
-                const balanceDueBeforeUpdate = balanceDue + prevAmount?.current;
+                const balanceDueBeforeUpdate =
+                  balanceDue + +prevAmount?.current;
 
                 if (+value > balanceDueBeforeUpdate && type === "split") {
-                  value = balanceDueRef.current?.toString();
+                  value = (balanceDueRef?.current || "")?.toString();
                 }
 
                 const newPaid = +value + paid - prevAmount?.current;

@@ -95,6 +95,7 @@ const FilteringSection = ({ isOpen, setOpen }: FilteringSectionProps) => {
                   <FormControl>
                     <Input
                       {...field}
+                      autoComplete="off"
                       placeholder="Code"
                       className={filterInputStyle}
                     />
@@ -112,6 +113,7 @@ const FilteringSection = ({ isOpen, setOpen }: FilteringSectionProps) => {
                   <FormControl>
                     <Input
                       {...field}
+                      autoComplete="off"
                       placeholder="SKU"
                       className={filterInputStyle}
                     />
@@ -129,6 +131,7 @@ const FilteringSection = ({ isOpen, setOpen }: FilteringSectionProps) => {
                   <FormControl>
                     <Input
                       {...field}
+                      autoComplete="off"
                       placeholder="Jewelry Name"
                       className={filterInputStyle}
                     />

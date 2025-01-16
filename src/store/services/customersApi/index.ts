@@ -35,6 +35,13 @@ interface CustomerResponse {
   id: number;
 }
 
+interface ZipResponse {
+  zipCode: string;
+  city: string;
+  sateId: string;
+  stateName: string;
+}
+
 export const customersApi = apiRtk.injectEndpoints({
   endpoints: (build) => ({
     getCustomers: build.query<TransformedCustomer[], void>({
@@ -58,7 +65,17 @@ export const customersApi = apiRtk.injectEndpoints({
       }),
       invalidatesTags: ["customers"],
     }),
+    getZip: build.query<ZipResponse, string>({
+      query: (zip: string) => ({
+        url: `/customers/zip-lookup/${zip}`,
+        method: REQUEST.GET,
+      }),
+    }),
   }),
 });
 
-export const { useGetCustomersQuery, useCreateCustomerMutation } = customersApi;
+export const {
+  useGetCustomersQuery,
+  useCreateCustomerMutation,
+  useLazyGetZipQuery,
+} = customersApi;

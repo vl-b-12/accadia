@@ -76,7 +76,7 @@ const LoginForm = () => {
             render={({ field }) => (
               <FormItem>
                 <FormControl>
-                  <Input {...field} placeholder="Password" />
+                  <Input {...field} placeholder="Password" autoComplete="off" />
                 </FormControl>
                 <FormMessage />
               </FormItem>

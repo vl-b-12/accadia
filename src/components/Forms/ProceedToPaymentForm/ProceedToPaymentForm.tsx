@@ -153,6 +153,7 @@ const ProceedToPaymentForm = () => {
                 <FormControl>
                   <Input
                     {...field}
+                    autoComplete="off"
                     type="number"
                     className="h-9 w-[80px] border-violent-40 px-4 text-xl font-medium"
                     onChange={(e) =>
@@ -176,6 +177,7 @@ const ProceedToPaymentForm = () => {
                 <FormControl>
                   <Input
                     {...field}
+                    autoComplete="off"
                     className="h-9 w-[104px] border-violent-40 px-4 text-xl font-medium"
                     onChange={(e) =>
                       inputValidator({

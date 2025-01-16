@@ -37,6 +37,7 @@ const CreditCardForm = ({ type }: CreditCardFormProps) => {
               <FormControl>
                 <Input
                   {...field}
+                  autoComplete="off"
                   placeholder="Insert Last 4 Digits"
                   className="h-[50px] text-xl font-semibold py-2 pr-8 placeholder:text-base placeholder:font-medium placeholder:capitalize placeholder:text-gray-70 grow-1 border-violent-30 focus-visible:ring-0 focus-visible:ring-offset-0 focus-visible:border-violent-40"
                   onChange={(e) => {
@@ -58,6 +59,7 @@ const CreditCardForm = ({ type }: CreditCardFormProps) => {
               <FormControl>
                 <Input
                   {...field}
+                  autoComplete="off"
                   placeholder="Cardholder Name"
                   className="h-[50px] text-xl font-semibold py-2 pr-8 placeholder:text-base placeholder:font-medium placeholder:capitalize placeholder:text-gray-70 grow-1 border-violent-30 focus-visible:ring-0 focus-visible:ring-offset-0 focus-visible:border-violent-40"
                 />
@@ -75,6 +77,7 @@ const CreditCardForm = ({ type }: CreditCardFormProps) => {
               <FormControl>
                 <Input
                   {...field}
+                  autoComplete="off"
                   placeholder="Bank Name"
                   className="h-[50px] text-xl font-semibold py-2 pr-8 placeholder:text-base placeholder:font-medium placeholder:capitalize placeholder:text-gray-70 grow-1 border-violent-30 focus-visible:ring-0 focus-visible:ring-offset-0 focus-visible:border-violent-40"
                 />

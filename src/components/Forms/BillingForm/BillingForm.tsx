@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   FormControl,
   FormField,
@@ -16,11 +16,31 @@ import {
 } from "@/components/ui/select";
 import { countries } from "@/constants";
 import CustomFormLabel from "@/components/Forms/CustomFormLabel/CustomFormLabel";
+import { useLazyGetZipQuery } from "@/store/services/customersApi";
+import { useDebounce } from "@/hooks/useDebounce";
+import { cn } from "@/lib/utils";
 
 const requiredFields = ["street1", "state", "city", "zipCode", "country"];
 
 const BillingForm = () => {
   const form = useFormContext();
+  const [getZip] = useLazyGetZipQuery();
+
+  const zipCode = form.watch("zipCode");
+  const debouncedZipCode = useDebounce(zipCode, 500);
+
+  const handleGetZip = async () => {
+    const response = await getZip(debouncedZipCode);
+    form.setValue("state", response.data?.stateName);
+    form.setValue("city", response.data?.city);
+    form.setValue("country", response.data?.stateName ? "US" : "");
+  };
+
+  useEffect(() => {
+    if (debouncedZipCode) {
+      handleGetZip();
+    }
+  }, [debouncedZipCode]);
 
   return (
     <>
@@ -36,6 +56,7 @@ const BillingForm = () => {
             <FormControl>
               <Input
                 {...field}
+                autoComplete="off"
                 placeholder="Enter street"
                 className="h-[50px] py-2 pr-8 placeholder:text-base placeholder:font-medium placeholder:capitalize placeholder:text-gray-70 grow-1 border-violent-30"
               />
@@ -57,6 +78,7 @@ const BillingForm = () => {
             <FormControl>
               <Input
                 {...field}
+                autoComplete="off"
                 placeholder="Enter street"
                 className="h-[50px] py-2 pr-8 placeholder:text-base placeholder:font-medium placeholder:capitalize placeholder:text-gray-70 grow-1 border-violent-30"
               />
@@ -78,6 +100,7 @@ const BillingForm = () => {
             <FormControl>
               <Input
                 {...field}
+                autoComplete="off"
                 placeholder="Enter zipcode"
                 className="h-[50px] py-2 pr-8 placeholder:text-base placeholder:font-medium placeholder:capitalize placeholder:text-gray-70 grow-1 border-violent-30"
               />
@@ -100,6 +123,7 @@ const BillingForm = () => {
               <FormControl>
                 <Input
                   {...field}
+                  autoComplete="off"
                   placeholder="Enter State"
                   className="h-[50px] py-2 pr-8 placeholder:text-base placeholder:font-medium placeholder:capitalize placeholder:text-gray-70 grow-1 border-violent-30"
                 />
@@ -121,6 +145,7 @@ const BillingForm = () => {
               <FormControl>
                 <Input
                   {...field}
+                  autoComplete="off"
                   placeholder="Enter city"
                   className="h-[50px] py-2 pr-8 placeholder:text-base placeholder:font-medium placeholder:capitalize placeholder:text-gray-70 grow-1 border-violent-30"
                 />
@@ -140,8 +165,13 @@ const BillingForm = () => {
               label="Country"
               isRequired={requiredFields.includes(field.name)}
             />
-            <Select onValueChange={field.onChange} defaultValue={field.value}>
-              <FormControl className="text-base font-medium text-gray-70 placeholder:font-medium placeholder:text-gray-70">
+            <Select onValueChange={field.onChange} value={field.value}>
+              <FormControl
+                className={cn(
+                  "text-base font-medium text-gray-70 placeholder:font-medium placeholder:text-gray-70",
+                  { "text-base font-semibold text-black": !!field.value },
+                )}
+              >
                 <SelectTrigger className="h-[50px] w-full border border-violent-30">
                   <SelectValue placeholder="Select Country" />
                 </SelectTrigger>

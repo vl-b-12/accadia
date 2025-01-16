@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   FormControl,
   FormField,
@@ -18,6 +18,9 @@ import {
 import { countries } from "@/constants";
 import { Checkbox } from "@/components/ui/checkbox";
 import CustomFormLabel from "@/components/Forms/CustomFormLabel/CustomFormLabel";
+import { useLazyGetZipQuery } from "@/store/services/customersApi";
+import { useDebounce } from "@/hooks/useDebounce";
+import { cn } from "@/lib/utils";
 
 const requiredFields = [
   "shippingStreet1",
@@ -31,6 +34,23 @@ const ShippingForm = () => {
   const form = useFormContext();
   const autoFill = form.watch("sameAsMailing");
   const hasRequiredFields = form.getValues("zipCode");
+  const [getZip] = useLazyGetZipQuery();
+
+  const zipCode = form.watch("shippingZipCode");
+  const debouncedZipCode = useDebounce(zipCode, 500);
+
+  const handleGetZip = async () => {
+    const response = await getZip(debouncedZipCode);
+    form.setValue("shippingState", response.data?.stateName);
+    form.setValue("shippingCity", response.data?.city);
+    form.setValue("shippingCountry", response.data?.stateName ? "US" : "");
+  };
+
+  useEffect(() => {
+    if (debouncedZipCode) {
+      handleGetZip();
+    }
+  }, [debouncedZipCode]);
 
   const handleCheckboxChange = (checked: boolean) => {
     form.setValue("sameAsMailing", checked);
@@ -90,6 +110,7 @@ const ShippingForm = () => {
             <FormControl>
               <Input
                 {...field}
+                autoComplete="off"
                 placeholder="Enter street"
                 className="h-[50px] py-2 pr-8 placeholder:text-base placeholder:font-medium placeholder:capitalize placeholder:text-gray-70 grow-1 border-violent-30"
               />
@@ -112,6 +133,7 @@ const ShippingForm = () => {
             <FormControl>
               <Input
                 {...field}
+                autoComplete="off"
                 placeholder="Enter street"
                 className="h-[50px] py-2 pr-8 placeholder:text-base placeholder:font-medium placeholder:capitalize placeholder:text-gray-70 grow-1 border-violent-30"
               />
@@ -134,6 +156,7 @@ const ShippingForm = () => {
             <FormControl>
               <Input
                 {...field}
+                autoComplete="off"
                 placeholder="Enter zipcode"
                 className="h-[50px] py-2 pr-8 placeholder:text-base placeholder:font-medium placeholder:capitalize placeholder:text-gray-70 grow-1 border-violent-30"
               />
@@ -157,6 +180,7 @@ const ShippingForm = () => {
               <FormControl>
                 <Input
                   {...field}
+                  autoComplete="off"
                   placeholder="Enter State"
                   className="h-[50px] py-2 pr-8 placeholder:text-base placeholder:font-medium placeholder:capitalize placeholder:text-gray-70 grow-1 border-violent-30"
                 />
@@ -179,6 +203,7 @@ const ShippingForm = () => {
               <FormControl>
                 <Input
                   {...field}
+                  autoComplete="off"
                   placeholder="Enter city"
                   className="h-[50px] py-2 pr-8 placeholder:text-base placeholder:font-medium placeholder:capitalize placeholder:text-gray-70 grow-1 border-violent-30"
                 />
@@ -203,7 +228,12 @@ const ShippingForm = () => {
               value={field.value}
               disabled={autoFill}
             >
-              <FormControl className="text-base font-medium text-gray-70 placeholder:font-medium placeholder:text-gray-70">
+              <FormControl
+                className={cn(
+                  "text-base font-medium text-gray-70 placeholder:font-medium placeholder:text-gray-70",
+                  { "text-base font-semibold text-black": !!field.value },
+                )}
+              >
                 <SelectTrigger className="h-[50px] w-full border border-violent-30">
                   <SelectValue placeholder="Select Country" />
                 </SelectTrigger>

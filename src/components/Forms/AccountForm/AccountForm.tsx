@@ -28,6 +28,7 @@ const AccountForm = () => {
             <FormControl>
               <Input
                 {...field}
+                autoComplete="off"
                 placeholder="Enter First Name"
                 className="h-[50px] py-2 pr-8 placeholder:text-base placeholder:font-medium placeholder:capitalize placeholder:text-gray-70 grow-1 border-violent-30"
               />
@@ -49,6 +50,7 @@ const AccountForm = () => {
             <FormControl>
               <Input
                 {...field}
+                autoComplete="off"
                 placeholder="Enter Last Name"
                 className="h-[50px] py-2 pr-8 placeholder:text-base placeholder:font-medium placeholder:capitalize placeholder:text-gray-70 grow-1 border-violent-30"
               />
@@ -92,6 +94,7 @@ const AccountForm = () => {
             <FormControl>
               <Input
                 {...field}
+                autoComplete="off"
                 placeholder="Enter Phone Number"
                 className="h-[50px] py-2 pr-8 placeholder:text-base placeholder:font-medium placeholder:capitalize placeholder:text-gray-70 grow-1 border-violent-30"
                 onChange={(e) => {

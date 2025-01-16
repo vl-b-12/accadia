@@ -15,7 +15,12 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/store/storeTypes";
 import { Button } from "@/components/ui/button";
-import { clearCart, setTax } from "@/store/slices/CartSlice/cartSlice";
+import {
+  clearCart,
+  setDiscount,
+  setGrandTotal,
+  setTax,
+} from "@/store/slices/CartSlice/cartSlice";
 import { formatPrice } from "@/lib/utils";
 import { useRouter } from "next/navigation";
 
@@ -38,10 +43,10 @@ const ProceedToPaymentForm = () => {
     e?.preventDefault();
   };
 
-  const numberInputValidator = ({
+  const inputValidator = ({
     e,
     field,
-    max = 100,
+    max = Infinity,
     min = 0,
     changed,
   }: {
@@ -53,31 +58,30 @@ const ProceedToPaymentForm = () => {
   }) => {
     let value = e.target.value;
 
-    if (value !== "0") {
-      value = value.replace(/^0+/, "");
+    if (!/^\d*\.?\d{0,2}$/.test(value)) {
+      return;
     }
 
-    const numericValue = Math.max(min, Math.min(Number(value) || min, max));
-    field.onChange(value === "" ? min?.toString() : numericValue?.toString());
+    if (!value) {
+      value = "0";
+    }
+
+    if (value !== "0" && value !== "0.") {
+      value = value.replace(/^0+(?=\d)/, "");
+    }
+
+    if (value === "" || value === "0." || /^\d+\.?\d*$/.test(value)) {
+      field.onChange(value);
+    }
+
+    if (value && value !== "0." && !value.endsWith(".")) {
+      const numericValue = Math.max(min, Math.min(Number(value), max));
+      field.onChange(numericValue.toString());
+    }
 
     if (changed) {
       setIsInputChanged(true);
     }
-  };
-
-  const taxInputValidator = (
-    e: ChangeEvent<HTMLInputElement>,
-    field: ControllerRenderProps,
-    min = 0,
-  ) => {
-    let value = e.target.value;
-
-    if (value !== "0") {
-      value = value.replace(/^0+/, "");
-    }
-
-    const numericValue = Math.max(min, Math.min(Number(value) || min));
-    field.onChange(value === "" ? min.toString() : numericValue.toString());
   };
 
   const grandTotal = useMemo(() => {
@@ -91,9 +95,12 @@ const ProceedToPaymentForm = () => {
     return total;
   }, [totalPrice, amount, tax]);
 
+  const { price: formattedGrandTotal } = formatPrice(grandTotal?.toString());
+
   useEffect(() => {
     dispatch(setTax(+tax));
-  }, [tax]);
+    dispatch(setDiscount(+discount));
+  }, [tax, amount]);
 
   useEffect(() => {
     if (isUpdating !== "amount" && discount && isInputChanged) {
@@ -149,7 +156,7 @@ const ProceedToPaymentForm = () => {
                     type="number"
                     className="h-9 w-[80px] border-violent-40 px-4 text-xl font-medium"
                     onChange={(e) =>
-                      numberInputValidator({ e, field, changed: true })
+                      inputValidator({ e, field, changed: true, max: 100 })
                     }
                   />
                 </FormControl>
@@ -171,7 +178,7 @@ const ProceedToPaymentForm = () => {
                     {...field}
                     className="h-9 w-[104px] border-violent-40 px-4 text-xl font-medium"
                     onChange={(e) =>
-                      numberInputValidator({
+                      inputValidator({
                         e,
                         field,
                         max: totalPrice,
@@ -196,8 +203,9 @@ const ProceedToPaymentForm = () => {
               <FormControl>
                 <Input
                   {...field}
+                  autoComplete="off"
                   className="h-9 w-[104px] border-violent-40 px-4 text-xl font-medium"
-                  onChange={(e) => taxInputValidator(e, field)}
+                  onChange={(e) => inputValidator({ e, field })}
                 />
               </FormControl>
               <FormMessage />
@@ -210,7 +218,7 @@ const ProceedToPaymentForm = () => {
         <div className="text-base font-medium">Grand Total:</div>
         <div className="text-[28px] font-bold">
           <span className="font-light">{currencySymbol}</span>
-          {grandTotal.toFixed(2)}
+          {formattedGrandTotal}
         </div>
       </div>
 
@@ -218,7 +226,10 @@ const ProceedToPaymentForm = () => {
         <Button
           variant="primary"
           className="h-14 uppercase"
-          onClick={() => push("/payment")}
+          onClick={() => {
+            push("/payment");
+            dispatch(setGrandTotal(grandTotal));
+          }}
         >
           Proceed
         </Button>

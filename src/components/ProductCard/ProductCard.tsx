@@ -101,7 +101,7 @@ const ProductCard = forwardRef(
     const cart = useSelector((state: RootState) => state.cart.cart);
 
     const isAddingDisabled = !!cart.find(
-      (cartItem) => cartItem.name === product.name,
+      (cartItem) => cartItem.sku === product.sku,
     );
 
     const handleAddToCart = (currentProduct: Product) => {

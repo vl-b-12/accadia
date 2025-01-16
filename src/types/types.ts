@@ -1,4 +1,5 @@
 export interface Product {
+  id: number;
   collection: string;
   description: string;
   goldWeight: number;

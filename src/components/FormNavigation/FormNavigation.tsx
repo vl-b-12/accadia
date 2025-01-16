@@ -1,5 +1,5 @@
 import React from "react";
-import { NavItem } from "@/types/types";
+import { NavItem, PaymentType } from "@/types/types";
 import FormNavigationItem from "@/components/FormNavigationItem/FormNavigationItem";
 
 interface FormNavigationProps {
@@ -7,6 +7,7 @@ interface FormNavigationProps {
   navConfig: NavItem[];
   setStep: (step: number) => void;
   fulfilledSteps?: number;
+  paymentType?: PaymentType;
   type?: "payment" | "default";
 }
 
@@ -15,6 +16,7 @@ const FormNavigation = ({
   navConfig,
   setStep,
   fulfilledSteps = 0,
+  paymentType,
   type = "default",
 }: FormNavigationProps) => {
   return (
@@ -27,6 +29,7 @@ const FormNavigation = ({
           isActive={step === item.id}
           setStep={setStep}
           disabled={item.id > fulfilledSteps + 1}
+          paymentType={paymentType}
         />
       ))}
     </div>

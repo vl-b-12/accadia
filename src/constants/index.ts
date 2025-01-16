@@ -1,4 +1,6 @@
 import { NavItem } from "@/types/types";
+import { z } from "zod";
+import { paymentFormSchema } from "@/schemas/paymentSchemas";
 
 export const addCustomerNavConfig: NavItem[] = [
   { id: 1, name: "Profile", icon: "/icons/customer-icon.svg" },
@@ -227,3 +229,34 @@ export const countries: { code: string; name: string }[] = [
   { code: "ZM", name: "Zambia" },
   { code: "ZW", name: "Zimbabwe" },
 ];
+
+export const paymentStepsMap: {
+  [key: number]:
+    | "creditCardAmount"
+    | "checkAmount"
+    | "cashAmount"
+    | "wireTransferAmount";
+} = {
+  1: "creditCardAmount",
+  2: "checkAmount",
+  3: "cashAmount",
+  4: "wireTransferAmount",
+};
+
+export const paymentFormDefaultValues: z.infer<typeof paymentFormSchema> = {
+  creditCardAmount: "",
+  last4Digits: "",
+  cardholderName: "",
+  bankName: "",
+  checkAmount: "",
+  bankNameAndNumber: "",
+  accountNumber: "",
+  referenceNumber: "",
+  dueDate: "",
+  cashAmount: "",
+  wireTransferAmount: "",
+  wireTransferBankNameAndNumber: "",
+  wireTransferAccountNumber: "",
+  wireTransferReferenceNumber: "",
+  wireTransferDueDate: "",
+};

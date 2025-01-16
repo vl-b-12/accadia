@@ -9,6 +9,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { FieldValues, SubmitHandler, useFormContext } from "react-hook-form";
 import { useRouter } from "next/navigation";
+import { DatePicker } from "@/components/ui/datePicker";
 
 const PersonalForm = () => {
   const { push } = useRouter();
@@ -31,11 +32,7 @@ const PersonalForm = () => {
           <FormItem className="relative grow">
             <FormLabel className="text-base font-medium">Birthday</FormLabel>
             <FormControl>
-              <Input
-                {...field}
-                placeholder="Enter Birthday"
-                className="h-[50px] py-2 pr-8 placeholder:text-base placeholder:font-medium placeholder:capitalize placeholder:text-gray-70 grow-1 border-violent-30"
-              />
+              <DatePicker {...field} />
             </FormControl>
             <FormMessage />
           </FormItem>
@@ -49,11 +46,7 @@ const PersonalForm = () => {
           <FormItem className="relative grow">
             <FormLabel className="text-base font-medium">Anniversary</FormLabel>
             <FormControl>
-              <Input
-                {...field}
-                placeholder="Enter Anniversary"
-                className="h-[50px] py-2 pr-8 placeholder:text-base placeholder:font-medium placeholder:capitalize placeholder:text-gray-70 grow-1 border-violent-30"
-              />
+              <DatePicker {...field} />
             </FormControl>
             <FormMessage />
           </FormItem>

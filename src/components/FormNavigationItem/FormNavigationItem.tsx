@@ -1,5 +1,5 @@
 import React from "react";
-import { NavItem } from "@/types/types";
+import { NavItem, PaymentType } from "@/types/types";
 import Image from "next/image";
 import { cn, formatPrice } from "@/lib/utils";
 import { useFormContext } from "react-hook-form";
@@ -10,6 +10,7 @@ interface FormNavigationItemProps {
   setStep: (step: number) => void;
   disabled: boolean;
   type: "payment" | "default";
+  paymentType?: PaymentType;
 }
 
 const FormNavigationItem = ({
@@ -18,21 +19,24 @@ const FormNavigationItem = ({
   setStep,
   type,
   disabled,
+  paymentType,
 }: FormNavigationItemProps) => {
   const isPaymentType = type === "payment";
   const form = useFormContext();
   const amount = form?.watch(navItem.dataKey ?? "");
   const { currencySymbol, price } = formatPrice(amount?.toString() || "0");
+  const isFullPayment = paymentType === "full";
 
   return (
     <div
       className={cn(
-        "flex gap-4 items-center p-4 rounded-md bg-violent-20 group h-[76px] cursor-pointer",
+        "flex gap-4 items-center p-4 rounded-md bg-violent-20 group h-[76px] cursor-pointer hover:bg-violent-40 duration-300 group",
         {
           "bg-violent-40": isActive,
           "bg-violent-10": isPaymentType && !isActive,
           "h-[85px]": isPaymentType,
-          "opacity-75 cursor-not-allowed": disabled && !isPaymentType,
+          "opacity-75 cursor-not-allowed hover:bg-violent-20":
+            disabled && !isPaymentType,
         },
       )}
       onClick={() => {
@@ -51,14 +55,18 @@ const FormNavigationItem = ({
       </div>
       <div>
         <div
-          className={cn("text-base font-medium text-gray-70", {
-            "text-white": isActive,
-            "text-lg": isPaymentType,
-          })}
+          className={cn(
+            "text-base font-medium text-gray-70 group-hover:text-white",
+            {
+              "text-white": isActive,
+              "text-lg": isPaymentType,
+              "group-hover:text-gray-70": disabled && !isPaymentType,
+            },
+          )}
         >
           {navItem.name}
         </div>
-        {isPaymentType && (
+        {isPaymentType && !isFullPayment && (
           <div
             className={cn("text-[15px] text-gray-70 font-bold", {
               "text-gray-0": isActive,

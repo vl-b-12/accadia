@@ -10,12 +10,14 @@ import CustomFormLabel from "@/components/Forms/CustomFormLabel/CustomFormLabel"
 import { Input } from "@/components/ui/input";
 import PaymentAmountInput from "@/components/Forms/PaymentAmountInput/PaymentAmountInput";
 import { PaymentType } from "@/types/types";
+import { DatePicker } from "@/components/ui/datePicker";
 
 interface CustomFormInputProps {
   type: PaymentType;
+  step: number;
 }
 
-const WireTransferForm = ({ type }: CustomFormInputProps) => {
+const WireTransferForm = ({ type, step }: CustomFormInputProps) => {
   const form = useFormContext();
 
   return (
@@ -86,11 +88,7 @@ const WireTransferForm = ({ type }: CustomFormInputProps) => {
           render={({ field }) => (
             <FormItem>
               <FormControl>
-                <Input
-                  {...field}
-                  placeholder="Due Date"
-                  className="h-[50px] text-xl font-semibold py-2 pr-8 placeholder:text-base placeholder:font-medium placeholder:capitalize placeholder:text-gray-70 grow-1 border-violent-30 focus-visible:ring-0 focus-visible:ring-offset-0 focus-visible:border-violent-40 mb-8"
-                />
+                <DatePicker {...field} step={step} type={type} />
               </FormControl>
               <FormMessage />
             </FormItem>

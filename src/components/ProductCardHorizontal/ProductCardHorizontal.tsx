@@ -31,7 +31,7 @@ const ProductCardHorizontal = ({ product }: ProductCardHorizontalProps) => {
         />
       </div>
       <div className="flex gap-3 p-6 bg-bg-violent-10 w-full">
-        <div className="flex flex-col gap-1 justify-center">
+        <div className="flex flex-col gap-1 justify-center w-56">
           <h3 className="text-sm font-bold uppercase tracking-wider">
             {product.collection}
           </h3>

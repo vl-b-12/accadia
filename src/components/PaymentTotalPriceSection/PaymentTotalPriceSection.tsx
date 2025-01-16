@@ -5,22 +5,29 @@ import Image from "next/image";
 import { useSelector } from "react-redux";
 import { RootState } from "@/store/storeTypes";
 import { formatPrice } from "@/lib/utils";
+import { PaymentType } from "@/types/types";
 
 interface PaymentTotalPriceSectionState {
   step: number;
+  type: PaymentType | null;
 }
 
-const PaymentTotalPriceSection = ({ step }: PaymentTotalPriceSectionState) => {
+const PaymentTotalPriceSection = ({
+  step,
+  type,
+}: PaymentTotalPriceSectionState) => {
   const {
-    totalPrice,
     tax = 0,
     paid,
     balanceDue,
+    grandTotal,
   } = useSelector((state: RootState) => state.cart);
 
-  const { currencySymbol, price } = formatPrice(totalPrice?.toString());
+  const { currencySymbol, price } = formatPrice(grandTotal?.toString());
   const { price: formattedPaid } = formatPrice(paid?.toString());
   const { price: formattedBalanceDue } = formatPrice(balanceDue?.toString());
+
+  const isFullType = type === "full";
 
   return (
     <div className="p-4 bg-pink-default rounded-md flex justify-between items-center max-h-[118px]">
@@ -33,7 +40,7 @@ const PaymentTotalPriceSection = ({ step }: PaymentTotalPriceSectionState) => {
         />
       </div>
       <div className="flex gap-10 items-center">
-        {step !== 0 && (
+        {step !== 0 && !isFullType && (
           <>
             <div className="flex flex-col items-end text-gray-0">
               <div className="text-[15px] font-medium">Paid:</div>

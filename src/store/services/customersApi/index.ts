@@ -29,6 +29,12 @@ interface NewCustomer {
   nationality?: string;
 }
 
+interface CustomerResponse {
+  firstName?: string;
+  lastName?: string;
+  id: number;
+}
+
 export const customersApi = apiRtk.injectEndpoints({
   endpoints: (build) => ({
     getCustomers: build.query<TransformedCustomer[], void>({
@@ -44,7 +50,7 @@ export const customersApi = apiRtk.injectEndpoints({
       },
       providesTags: ["customers"],
     }),
-    createCustomer: build.mutation<void, NewCustomer>({
+    createCustomer: build.mutation<CustomerResponse, NewCustomer>({
       query: (props: NewCustomer) => ({
         url: "/customers",
         method: REQUEST.POST,

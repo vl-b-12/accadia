@@ -22,21 +22,21 @@ interface PaymentAmountInputProps {
 const PaymentAmountInput = ({ type, name }: PaymentAmountInputProps) => {
   const form = useFormContext();
   const dispatch = useDispatch();
-  const { totalPrice, balanceDue, paid } = useSelector(
+  const { grandTotal, balanceDue, paid } = useSelector(
     (state: RootState) => state.cart,
   );
   const initialInputValue = +(form.getValues(name) || 0);
-  const balanceDueRef = useRef(
-    balanceDue ? balanceDue + initialInputValue : initialInputValue,
-  );
   const prevAmount = useRef(initialInputValue || 0);
   const amountRef = useRef<HTMLInputElement>(null);
+  const isFullType = type === "full";
 
   useEffect(() => {
     if (amountRef.current) {
       amountRef.current.focus();
     }
   }, []);
+
+  if (isFullType) return null;
 
   return (
     <FormField
@@ -58,15 +58,15 @@ const PaymentAmountInput = ({ type, name }: PaymentAmountInputProps) => {
               onChange={(e) => {
                 let value = formatDecimalInput(e.target.value);
 
-                if (+value > totalPrice && type === "full") {
-                  value = totalPrice?.toString();
+                if (+value > grandTotal && isFullType) {
+                  value = grandTotal?.toString();
                 }
 
                 const balanceDueBeforeUpdate =
                   balanceDue + +prevAmount?.current;
 
                 if (+value >= balanceDueBeforeUpdate && type === "split") {
-                  value = (balanceDueRef?.current || "")?.toString();
+                  value = (balanceDueBeforeUpdate || "")?.toString();
                 }
 
                 const newPaid = +value + paid - prevAmount?.current;

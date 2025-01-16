@@ -1,58 +1,50 @@
 import { z } from "zod";
 
-export const creditCardFormSchema = z.object({
-  creditCardAmount: z.string().nonempty({
-    message: "Amount is required",
-  }),
-  last4Digits: z.string().nonempty({
-    message: "Please enter card number last 4 digits",
-  }),
-  cardholderName: z.string().nonempty({
-    message: "Cardholder Name  is required",
-  }),
-  bankName: z.string().nonempty({
-    message: "Bank Name is required",
-  }),
-});
+export const paymentFormSchema = z
+  .object({
+    creditCardAmount: z.string().optional(),
+    last4Digits: z.string().optional(),
+    cardholderName: z.string().optional(),
+    bankName: z.string().optional(),
+    checkAmount: z.string().optional(),
+    bankNameAndNumber: z.string().optional(),
+    accountNumber: z.string().optional(),
+    referenceNumber: z.string().optional(),
+    dueDate: z.string().optional(),
+    cashAmount: z.string().optional(),
+    wireTransferAmount: z.string().optional(),
+    wireTransferBankNameAndNumber: z.string().optional(),
+    wireTransferAccountNumber: z.string().optional(),
+    wireTransferReferenceNumber: z.string().optional(),
+    wireTransferDueDate: z.string().optional(),
+  })
+  .refine((data) => {
+    if (
+      data.creditCardAmount &&
+      (!data.last4Digits || !data.cardholderName || !data.bankName)
+    ) {
+      return false;
+    }
 
-export const checkFormSchema = z.object({
-  checkAmount: z.string().nonempty({
-    message: "Amount is required",
-  }),
-  bankNameAndNumber: z.string().nonempty({
-    message: "Please enter Bank Name / Number",
-  }),
-  accountNumber: z.string().nonempty({
-    message: "Account Number is required",
-  }),
-  referenceNumber: z.string().nonempty({
-    message: "Reference Number is required",
-  }),
-  dueDate: z.string().nonempty({
-    message: "Due Date is required",
-  }),
-});
+    if (
+      data.checkAmount &&
+      (!data.bankNameAndNumber ||
+        !data.accountNumber ||
+        !data.referenceNumber ||
+        !data.dueDate)
+    ) {
+      return false;
+    }
 
-export const cashFormSchema = z.object({
-  cashAmount: z.string().nonempty({
-    message: "Amount is required",
-  }),
-});
+    if (
+      data.wireTransferAmount &&
+      (!data.wireTransferBankNameAndNumber ||
+        !data.wireTransferAccountNumber ||
+        !data.wireTransferReferenceNumber ||
+        !data.wireTransferDueDate)
+    ) {
+      return false;
+    }
 
-export const wireTransferFormSchema = z.object({
-  wireTransferAmount: z.string().nonempty({
-    message: "Amount is required",
-  }),
-  wireTransferBankNameAndNumber: z.string().nonempty({
-    message: "Please enter Bank Name / Number",
-  }),
-  wireTransferAccountNumber: z.string().nonempty({
-    message: "Account Number is required",
-  }),
-  wireTransferReferenceNumber: z.string().nonempty({
-    message: "Reference Number is required",
-  }),
-  wireTransferDueDate: z.string().nonempty({
-    message: "Due Date is required",
-  }),
-});
+    return true;
+  });

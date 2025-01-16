@@ -9,6 +9,8 @@ interface CartState {
   karatsBreakdown: KaratsBreakdown[] | null;
   paid: number;
   balanceDue: number;
+  grandTotal: number;
+  discount: number;
 }
 
 interface KaratsBreakdown {
@@ -24,6 +26,8 @@ const initialState: CartState = {
   karatsBreakdown: null,
   paid: 0,
   balanceDue: 0,
+  grandTotal: 0,
+  discount: 0,
 };
 
 export const cartSlice = createSlice({
@@ -31,7 +35,7 @@ export const cartSlice = createSlice({
   initialState,
   reducers: {
     addProductToCart: (state, { payload }) => {
-      state.cart.push({ ...payload });
+      state.cart.push({ ...payload, id: state.cart.length + 1 });
     },
     deleteProductFromCart: (state, { payload: sku }) => {
       state.cart = state.cart.filter((cart) => cart.sku !== sku);
@@ -41,8 +45,17 @@ export const cartSlice = createSlice({
       state.tax = payload;
     },
     setPaid: (state, { payload }) => {
-      state.balanceDue = Number((state.totalPrice - payload).toFixed(2));
+      state.balanceDue = Number((state.grandTotal - payload).toFixed(2));
       state.paid = payload;
+    },
+    setBalanceDue: (state, { payload }) => {
+      state.balanceDue = Number(payload);
+    },
+    setGrandTotal: (state, { payload }) => {
+      state.grandTotal = Number(payload);
+    },
+    setDiscount: (state, { payload }) => {
+      state.discount = Number(payload);
     },
   },
   extraReducers: (builder) => {
@@ -50,13 +63,14 @@ export const cartSlice = createSlice({
       (action) =>
         action.type.endsWith("addProductToCart") ||
         action.type.endsWith("deleteProductFromCart") ||
-        action.type.endsWith("clearCart"),
+        action.type.endsWith("clearCart") ||
+        action.type.endsWith("setTax"),
       (state) => {
         state.totalPrice = state.cart.reduce(
           (total, product) => total + product.price,
           0,
         );
-        state.balanceDue = state.totalPrice;
+        state.balanceDue = state.totalPrice + state.tax;
         state.totalQnt = state.cart.length;
         state.karatsBreakdown = state.cart.reduce<KaratsBreakdown[]>(
           (acc, product) => {
@@ -84,6 +98,9 @@ export const {
   deleteProductFromCart,
   setTax,
   setPaid,
+  setBalanceDue,
+  setGrandTotal,
+  setDiscount,
 } = cartSlice.actions;
 
 export default cartSlice.reducer;

@@ -8,8 +8,6 @@ interface Collection {
 
 type JewelryTypes = Collection;
 
-//TODO update spelling
-
 interface FiltersResponse {
   collections: Collection[];
   jewelryTypes: JewelryTypes[];

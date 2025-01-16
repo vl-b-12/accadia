@@ -4,23 +4,35 @@ import { cartSlice, customerSlice, filterSlice } from "@/store/slices";
 import storage from "redux-persist/lib/storage";
 import { persistReducer, persistStore } from "redux-persist";
 
-const persistConfig = {
-  key: "root",
+const cartPersistConfig = {
+  key: "cart",
   storage,
-  whitelist: ["cart"],
+  whitelist: [
+    "cart",
+    "totalPrice",
+    "totalQnt",
+    "tax",
+    "karatsBreakdown",
+    "grandTotal",
+    "discount",
+  ],
+};
+
+const customerPersistConfig = {
+  key: "customers",
+  storage,
+  whitelist: ["selectedCustomer"],
 };
 
 const rootReducer = combineReducers({
-  cart: cartSlice,
-  customer: customerSlice,
+  cart: persistReducer(cartPersistConfig, cartSlice),
+  customer: persistReducer(customerPersistConfig, customerSlice),
   filter: filterSlice,
   [apiRtk.reducerPath]: apiRtk.reducer,
 });
 
-const persistedReducer = persistReducer(persistConfig, rootReducer);
-
 export const store = configureStore({
-  reducer: persistedReducer,
+  reducer: rootReducer,
   devTools: true,
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

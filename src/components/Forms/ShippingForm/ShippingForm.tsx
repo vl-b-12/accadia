@@ -100,7 +100,7 @@ const ShippingForm = () => {
               />
             </FormControl>
             <FormLabel className="text-base font-medium">
-              Same as Mailing Address
+              Same as Billing Address
             </FormLabel>
           </FormItem>
         )}

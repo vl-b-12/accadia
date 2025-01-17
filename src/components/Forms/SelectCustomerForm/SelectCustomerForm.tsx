@@ -17,6 +17,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/store/storeTypes";
 import { useRouter } from "next/navigation";
 import { useGetCustomersQuery } from "@/store/services/customersApi";
+import { useDebounce } from "@/hooks/useDebounce";
 
 interface SelectCustomerFormProps {
   setStep: (step: number) => void;
@@ -29,12 +30,15 @@ const SelectCustomerForm = ({ setStep }: SelectCustomerFormProps) => {
     (state: RootState) => state.customer,
   );
 
-  const { data: customers } = useGetCustomersQuery();
-
   const form = useFormContext();
   const customerQuery = form.watch("fullName");
+  const debouncedCustomerQuery = useDebounce(customerQuery, 500);
 
-  const customersToShow = customers?.filter((customer) =>
+  const { data } = useGetCustomersQuery(
+    debouncedCustomerQuery ? { name: debouncedCustomerQuery } : undefined,
+  );
+
+  const customersToShow = data?.items?.filter((customer) =>
     customer.fullName?.toLowerCase().includes(customerQuery?.toLowerCase()),
   );
 

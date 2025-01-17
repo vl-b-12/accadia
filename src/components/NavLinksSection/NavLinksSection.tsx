@@ -23,7 +23,7 @@ const NavLinksSection = () => {
         text="Customers"
         icon="/icons/user-icon.svg"
         activeIcon="/icons/user-icon-active.svg"
-        isActive={pathname === "/customers"}
+        isActive={pathname.includes("/customers")}
         iconWidth={18}
         iconHeight={18}
       />

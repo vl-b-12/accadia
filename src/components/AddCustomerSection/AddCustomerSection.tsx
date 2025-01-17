@@ -54,7 +54,7 @@ const addCustomerDefaultValues: { [key: number]: { [key: string]: string } } = {
     shippingCountry: "",
   },
   4: {
-    birthday: "",
+    birthDay: "",
     anniversary: "",
     spouse: "",
     nationality: "",

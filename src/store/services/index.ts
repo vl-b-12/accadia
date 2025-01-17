@@ -32,6 +32,7 @@ const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "/";
 export const RTK_TAGS = {
   PRODUCTS: "products",
   CUSTOMERS: "customers",
+  CUSTOMERS_SEARCH: "customersSearch",
 } as const;
 
 const baseQuery = fetchBaseQuery({

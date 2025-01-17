@@ -26,10 +26,7 @@ const Header = () => {
 
   return (
     <div className="fixed top-0 left-0 z-40 w-full bg-gray-0 flex gap-8 justify-between py-3 px-6 h-[90px]">
-      <div
-        className="flex gap-8 shrink-0 cursor-pointer"
-        onClick={() => push("/")}
-      >
+      <div className="flex gap-8 shrink-0 cursor-pointer">
         <Image src={logo} alt="Accadia Icon" width={60} height={62} />
         {!isFiltersSectionOpen && <NavLinksSection />}
       </div>

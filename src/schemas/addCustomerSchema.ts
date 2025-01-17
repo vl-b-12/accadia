@@ -59,7 +59,7 @@ export const addCustomerSchemaShipping = z.object({
 });
 
 export const addCustomerSchemaPersonal = z.object({
-  birthday: z.string().optional(),
+  birthDay: z.string().optional(),
   anniversary: z.string().optional(),
   spouse: z.string().optional(),
   nationality: z.string().optional(),

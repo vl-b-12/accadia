@@ -1,8 +1,8 @@
 import { REQUEST } from "@/store/storeTypes";
 import { apiRtk } from "../";
 
-interface ProductToSend {
-  id: number;
+export interface ProductToSend {
+  sku: number;
   price: number;
 }
 

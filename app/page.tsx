@@ -2,7 +2,7 @@
 
 import React, { useEffect, useRef, useState } from "react";
 import ProductCard from "@/components/ProductCard/ProductCard";
-// import { useRouter } from "next/navigation";
+import { redirect } from "next/navigation";
 import { useGetProductsQuery } from "@/store/services/productsApi";
 import { Product } from "@/types/types";
 import { useSelector } from "react-redux";
@@ -11,20 +11,20 @@ import { RootState } from "@/store/storeTypes";
 const HomePage = () => {
   const [page, setPage] = useState(1);
   const [productsToShow, setProductsToShow] = useState<Product[]>([]);
-  // const { push } = useRouter();
   const lastProductCardRef = useRef<HTMLDivElement | null>(null);
   const { selectedFilters } = useSelector((state: RootState) => state.filter);
 
   const { data: products } = useGetProductsQuery({ page, ...selectedFilters });
+  const isAuthenticated = sessionStorage.getItem("accessToken");
 
   //TODO check auth later
 
-  // useEffect(() => {
-  //   if (isAuthenticated) {
-  //     sessionStorage.removeItem("accessToken");
-  //     push("/login");
-  //   }
-  // }, [isAuthenticated]);
+  useEffect(() => {
+    if (!isAuthenticated) {
+      sessionStorage.removeItem("accessToken");
+      redirect("/login");
+    }
+  }, [isAuthenticated]);
 
   useEffect(() => {
     setPage(1);

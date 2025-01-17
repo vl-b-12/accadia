@@ -3,10 +3,12 @@ import { createSlice } from "@reduxjs/toolkit";
 
 interface CustomerState {
   selectedCustomer: Customer | null;
+  selectedHistoryCustomer: Customer | null;
 }
 
 const initialState: CustomerState = {
   selectedCustomer: null,
+  selectedHistoryCustomer: null,
 };
 
 export const customerSlice = createSlice({
@@ -19,9 +21,20 @@ export const customerSlice = createSlice({
     clearSelectedCustomer: (state) => {
       state.selectedCustomer = null;
     },
+    setSelectedHistoryCustomer: (state, { payload }) => {
+      state.selectedHistoryCustomer = payload;
+    },
+    clearSelectedHistoryCustomer: (state) => {
+      state.selectedHistoryCustomer = null;
+    },
   },
 });
 
-export const { selectCustomer, clearSelectedCustomer } = customerSlice.actions;
+export const {
+  selectCustomer,
+  clearSelectedCustomer,
+  setSelectedHistoryCustomer,
+  clearSelectedHistoryCustomer,
+} = customerSlice.actions;
 
 export default customerSlice.reducer;

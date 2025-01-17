@@ -1,9 +1,15 @@
 import { REQUEST } from "@/store/storeTypes";
 import { apiRtk } from "../";
 import { Customer } from "@/types/types";
+import { ProductToSend } from "@/store/services/paymentsApi";
 
-interface TransformedCustomer extends Customer {
-  fullName: string;
+interface TransformedCustomerResponse {
+  items: Customer[];
+  page: number;
+  hasNextPage: boolean;
+  pageSize: number;
+  totalCount: number;
+  totalPages: number;
 }
 
 interface NewCustomer {
@@ -42,18 +48,37 @@ interface ZipResponse {
   stateName: string;
 }
 
+interface CustomerHistoryResponse {
+  paymentId: number;
+  purchaseDate: string;
+  price: number;
+  taxes: number;
+  userCreditCardPayment: boolean;
+  userCheckPayment: boolean;
+  cashPayment: boolean;
+  wirePayment: boolean;
+  products: ProductToSend[];
+}
+
 export const customersApi = apiRtk.injectEndpoints({
   endpoints: (build) => ({
-    getCustomers: build.query<TransformedCustomer[], void>({
-      query: () => ({
+    getCustomers: build.query<
+      TransformedCustomerResponse,
+      { name: string } | void
+    >({
+      query: (props) => ({
         url: "/customers",
         method: REQUEST.GET,
+        params: props ? props : {},
       }),
-      transformResponse: (response: Customer[]) => {
-        return response.map((customer) => ({
-          ...customer,
-          fullName: `${customer.firstName} ${customer.lastName}`,
-        }));
+      transformResponse: (response: TransformedCustomerResponse) => {
+        return {
+          ...response,
+          items: response.items.map((customer) => ({
+            ...customer,
+            fullName: `${customer.firstName} ${customer.lastName}`,
+          })),
+        };
       },
       providesTags: ["customers"],
     }),
@@ -71,6 +96,12 @@ export const customersApi = apiRtk.injectEndpoints({
         method: REQUEST.GET,
       }),
     }),
+    getHistory: build.query<CustomerHistoryResponse, string>({
+      query: (customerId: string) => ({
+        url: `/customers/history/${customerId}`,
+        method: REQUEST.GET,
+      }),
+    }),
   }),
 });
 
@@ -78,4 +109,5 @@ export const {
   useGetCustomersQuery,
   useCreateCustomerMutation,
   useLazyGetZipQuery,
+  useGetHistoryQuery,
 } = customersApi;

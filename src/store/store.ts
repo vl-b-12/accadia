@@ -21,7 +21,7 @@ const cartPersistConfig = {
 const customerPersistConfig = {
   key: "customers",
   storage,
-  whitelist: ["selectedCustomer"],
+  whitelist: ["selectedCustomer", "selectedHistoryCustomer"],
 };
 
 const rootReducer = combineReducers({

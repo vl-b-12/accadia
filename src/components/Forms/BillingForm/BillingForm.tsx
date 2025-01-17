@@ -31,9 +31,18 @@ const BillingForm = () => {
 
   const handleGetZip = async () => {
     const response = await getZip(debouncedZipCode);
-    form.setValue("state", response.data?.stateName);
-    form.setValue("city", response.data?.city);
-    form.setValue("country", response.data?.stateName ? "US" : "");
+    form.setValue("state", response.data?.stateName, {
+      shouldTouch: true,
+      shouldValidate: !!response.data?.stateName,
+    });
+    form.setValue("city", response.data?.city, {
+      shouldTouch: true,
+      shouldValidate: !!response.data?.city,
+    });
+    form.setValue("country", response.data?.stateName ? "US" : "", {
+      shouldTouch: true,
+      shouldValidate: !!(response.data?.stateName ? "US" : ""),
+    });
   };
 
   useEffect(() => {

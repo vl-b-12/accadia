@@ -42,6 +42,7 @@ export interface Customer {
   state: string;
   dob: string;
   fullName: string;
+  hasPayments: boolean;
 }
 
 export interface Filters {

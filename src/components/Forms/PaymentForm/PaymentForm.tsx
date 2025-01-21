@@ -77,7 +77,8 @@ const PaymentForm = ({
     const dataToSend = {
       customerId: selectedCustomer!.id,
       items: cart?.map((product) => ({
-        sku: product.id,
+        sku: product.sku,
+        name: product.name,
         price: +product.price,
       })),
       subtotal: +totalPrice,

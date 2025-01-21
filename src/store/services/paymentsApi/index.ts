@@ -2,7 +2,8 @@ import { REQUEST } from "@/store/storeTypes";
 import { apiRtk } from "../";
 
 export interface ProductToSend {
-  sku: number;
+  sku: string;
+  name: string;
   price: number;
 }
 

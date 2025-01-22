@@ -30,10 +30,7 @@ const FormNavigationItem = ({
   const isFullPayment = paymentType === "full";
 
   const {
-    tax = 0,
-    paid,
-    balanceDue,
-    grandTotal,
+    balanceDue
   } = useSelector((state: RootState) => state.cart);
 
   const { price: formattedBalanceDue } = formatPrice(balanceDue?.toString());

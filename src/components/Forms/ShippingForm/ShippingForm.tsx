@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import {
   FormControl,
   FormField,
@@ -35,6 +35,7 @@ const ShippingForm = () => {
   const autoFill = form.watch("sameAsMailing");
   const hasRequiredFields = form.getValues("zipCode");
   const [getZip] = useLazyGetZipQuery();
+  const shouldWatchZip = useRef(true);
 
   const zipCode = form.watch("shippingZipCode");
   const debouncedZipCode = useDebounce(zipCode, 500);
@@ -56,7 +57,7 @@ const ShippingForm = () => {
   };
 
   useEffect(() => {
-    if (debouncedZipCode) {
+    if (debouncedZipCode && shouldWatchZip.current) {
       handleGetZip();
     }
   }, [debouncedZipCode]);
@@ -64,6 +65,7 @@ const ShippingForm = () => {
   const handleCheckboxChange = (checked: boolean) => {
     form.setValue("sameAsMailing", checked);
 
+    shouldWatchZip.current = false;
     if (checked) {
       form.setValue("shippingStreet1", form.getValues("street1"));
       form.setValue("shippingStreet2", form.getValues("street2"));
@@ -79,7 +81,9 @@ const ShippingForm = () => {
       form.setValue("shippingZipCode", "");
       form.setValue("shippingCountry", "");
     }
-
+    setTimeout(() => {
+      shouldWatchZip.current = true;
+    }, 550);
     form.trigger(requiredFields);
   };
 

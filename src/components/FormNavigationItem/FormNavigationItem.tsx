@@ -3,6 +3,8 @@ import { NavItem, PaymentType } from "@/types/types";
 import Image from "next/image";
 import { cn, formatPrice } from "@/lib/utils";
 import { useFormContext } from "react-hook-form";
+import { useSelector } from "react-redux";
+import { RootState } from "@/store/storeTypes";
 
 interface FormNavigationItemProps {
   isActive: boolean;
@@ -26,6 +28,15 @@ const FormNavigationItem = ({
   const amount = form?.watch(navItem.dataKey ?? "");
   const { currencySymbol, price } = formatPrice(amount?.toString() || "0");
   const isFullPayment = paymentType === "full";
+
+  const {
+    tax = 0,
+    paid,
+    balanceDue,
+    grandTotal,
+  } = useSelector((state: RootState) => state.cart);
+
+  const { price: formattedBalanceDue } = formatPrice(balanceDue?.toString());
 
   return (
     <div
@@ -75,6 +86,10 @@ const FormNavigationItem = ({
             <span className="text-[13px] font-normal pr-1.5">Paid:</span>
             <span>{currencySymbol}</span>
             {price}
+            <br/>
+            <span className="text-[13px] font-normal pr-1.5">Balance due:</span>
+            <span>{currencySymbol}</span>
+            {formattedBalanceDue || "0.00"}
           </div>
         )}
       </div>

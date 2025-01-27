@@ -77,12 +77,12 @@ export const customersApi = apiRtk.injectEndpoints({
   endpoints: (build) => ({
     getCustomers: build.query<
       TransformedCustomerResponse,
-      { name: string } | void
+      { name?: string; page?: number }
     >({
       query: (props) => ({
         url: "/customers",
         method: REQUEST.GET,
-        params: props ? props : {},
+        params: props,
       }),
       transformResponse: (response: TransformedCustomerResponse) => {
         return {

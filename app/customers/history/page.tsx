@@ -30,8 +30,6 @@ const HistoryPage = () => {
     sort,
   });
 
-  console.log(history, "history");
-
   useEffect(() => {
     if (history?.items) {
       if (history?.page > 1) {

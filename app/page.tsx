@@ -17,6 +17,28 @@ const HomePage = () => {
   const { data: products } = useGetProductsQuery({ page, ...selectedFilters });
   const isAuthenticated = sessionStorage.getItem("accessToken");
 
+  // const [getInvoice] = useLazyGetInvoiceQuery();
+  // const handleGetInvoice = async () => {
+  //   const res = await getInvoice(1);
+  //   console.log(res, "RES");
+  //
+  //   const a = document.createElement("a");
+  //   document.body.appendChild(a);
+  //   debugger;
+  //   const url = window.URL.createObjectURL(res.data);
+  //   a.href = url;
+  //   a.download = res.data.filename || "file.pdf";
+  //   a.click();
+  //   setTimeout(() => {
+  //     window.URL.revokeObjectURL(url);
+  //     document.body.removeChild(a);
+  //   }, 0);
+  // };
+  //
+  // useEffect(() => {
+  //   handleGetInvoice();
+  // }, []);
+
   //TODO check auth later
 
   useEffect(() => {

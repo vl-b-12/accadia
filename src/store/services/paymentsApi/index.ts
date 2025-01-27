@@ -57,7 +57,17 @@ export const paymentsApi = apiRtk.injectEndpoints({
         body: props,
       }),
     }),
+    getInvoice: build.query({
+      query: (paymentId) => ({
+        url: `/payments/get-invoice/${paymentId}`,
+        method: REQUEST.GET,
+        responseHandler: (res) => res.blob(),
+        headers: {
+          "Accept-type": "application/pdf",
+        },
+      }),
+    }),
   }),
 });
 
-export const { useCreatePaymentMutation } = paymentsApi;
+export const { useCreatePaymentMutation, useLazyGetInvoiceQuery } = paymentsApi;

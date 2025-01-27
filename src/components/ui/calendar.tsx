@@ -3,9 +3,20 @@
 import * as React from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { DayPicker } from "react-day-picker";
+import "react-day-picker/dist/style.css";
 
 import { cn } from "@/lib/utils";
 import { buttonVariants } from "@/components/ui/button";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "./select";
+import { format } from "date-fns";
+import { ReactElement } from "react";
 
 export type CalendarProps = React.ComponentProps<typeof DayPicker>;
 
@@ -19,13 +30,14 @@ function Calendar({
     <DayPicker
       captionLayout="dropdown-buttons"
       fromYear={new Date().getFullYear() - 80}
-      toYear={new Date().getFullYear() + 10}
+      toYear={new Date().getFullYear() + 1}
+      pagedNavigation
       showOutsideDays={showOutsideDays}
-      className={cn("p-3", className)}
+      className={cn("p-1 !m-1", className)}
       classNames={{
         months: "flex flex-col sm:flex-row space-y-4 sm:space-x-4 sm:space-y-0",
         month: "space-y-4",
-        caption: "flex justify-center pt-1 relative items-center",
+        caption: "flex justify-center gap-2 pt-1 relative items-center",
         caption_label: "text-sm font-medium",
         nav: "space-x-1 flex items-center",
         nav_button: cn(
@@ -64,6 +76,40 @@ function Calendar({
         IconRight: ({ className, ...props }) => (
           <ChevronRight className={cn("h-4 w-4", className)} {...props} />
         ),
+        Dropdown: ({ className, ...props }) => {
+          const isMonthsDropdown = props.name === "months";
+          return (
+            <Select
+              onValueChange={(value) => {
+                props.onChange?.({
+                  target: { value },
+                } as React.ChangeEvent<HTMLSelectElement>);
+              }}
+            >
+              <SelectTrigger className={cn("h-5 p-1", className)}>
+                <SelectValue
+                  placeholder={format(
+                    new Date(),
+                    isMonthsDropdown ? "MMMM" : "yyyy",
+                  )}
+                />
+              </SelectTrigger>
+              <SelectContent className="max-h-[200px]">
+                <SelectGroup>
+                  {(props?.children as ReactElement[])?.map((item) => (
+                    <SelectItem
+                      key={item.key}
+                      value={item.props.value}
+                      className="px-1 justify-center"
+                    >
+                      {item.props.children}
+                    </SelectItem>
+                  ))}
+                </SelectGroup>
+              </SelectContent>
+            </Select>
+          );
+        },
       }}
       {...props}
     />

@@ -69,7 +69,7 @@ const addCustomerFormConfig: { [key: number]: ReactElement } = {
 };
 
 const AddCustomerSection = () => {
-  const [step, setStep] = useState(1);
+  const [step, setStep] = useState(4);
   const [fulfilledSteps, setFulfilledSteps] = useState(0);
   const { push } = useRouter();
   const dispatch = useDispatch();

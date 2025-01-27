@@ -3,13 +3,16 @@ import { apiRtk } from "../";
 import { Customer } from "@/types/types";
 import { ProductToSend } from "@/store/services/paymentsApi";
 
-interface TransformedCustomerResponse {
-  items: Customer[];
+interface Pagination {
   page: number;
   hasNextPage: boolean;
   pageSize: number;
   totalCount: number;
   totalPages: number;
+}
+
+interface TransformedCustomerResponse extends Pagination {
+  items: Customer[];
 }
 
 interface NewCustomer {
@@ -48,7 +51,7 @@ interface ZipResponse {
   stateName: string;
 }
 
-interface CustomerHistoryResponse {
+export interface CustomerHistoryResponse {
   paymentId: number;
   purchaseDate: string;
   price: number;
@@ -58,6 +61,16 @@ interface CustomerHistoryResponse {
   cashPayment: boolean;
   wirePayment: boolean;
   products: ProductToSend[];
+}
+
+export interface TransformedHistoryResponse extends Pagination {
+  items: CustomerHistoryResponse[];
+}
+
+export interface CustomerHistoryQuery {
+  page?: number;
+  customerId?: string;
+  sort?: string;
 }
 
 export const customersApi = apiRtk.injectEndpoints({
@@ -96,10 +109,11 @@ export const customersApi = apiRtk.injectEndpoints({
         method: REQUEST.GET,
       }),
     }),
-    getHistory: build.query<CustomerHistoryResponse, string>({
-      query: (customerId: string) => ({
+    getHistory: build.query<TransformedHistoryResponse, CustomerHistoryQuery>({
+      query: ({ page, customerId, sort }) => ({
         url: `/customers/history/${customerId}`,
         method: REQUEST.GET,
+        params: { page, sort },
       }),
     }),
   }),

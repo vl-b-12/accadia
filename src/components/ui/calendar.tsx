@@ -86,7 +86,7 @@ function Calendar({
                 } as React.ChangeEvent<HTMLSelectElement>);
               }}
             >
-              <SelectTrigger className={cn("h-5 p-1", className)}>
+              <SelectTrigger className={cn("h-5 p-1 focus:ring-0", className)}>
                 <SelectValue
                   placeholder={format(
                     new Date(),

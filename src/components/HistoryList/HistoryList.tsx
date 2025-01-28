@@ -26,7 +26,7 @@ const HistoryList = forwardRef(
 
     return (
       <div className="pt-6 px-6">
-        <div className="grid grid-cols-[2fr_1fr_1fr_1fr_1fr_0.5fr] gap-2 text-base font-medium text-gray-70 border-b border-b-violent-30">
+        <div className="grid grid-cols-[2fr_1fr_1fr_1fr_1fr_120px] gap-2 text-base font-medium text-gray-70 border-b border-b-violent-30">
           <div className={cn(cellStyle)}>Order</div>
           <div className={cn(cellStyle)}>Purchase Day</div>
           <div className={cn(cellStyle)}>Payment Methods</div>
@@ -51,7 +51,7 @@ const HistoryList = forwardRef(
               >
                 <AccordionItem
                   value={historyItem.paymentId.toString()}
-                  className="grid grid-cols-[2fr_1fr_1fr_1fr_1fr_0.5fr] gap-2 border-b border-b-[#DBDADE] pt-6 hover:bg-violent-20 duration-300"
+                  className="grid grid-cols-[2fr_1fr_1fr_1fr_1fr_120px] gap-2 border-b border-b-[#DBDADE] pt-6 hover:bg-violent-20 duration-300"
                 >
                   <AccordionTrigger className={cn(cellStyle)}>
                     <div className="font-medium">

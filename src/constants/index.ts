@@ -4,7 +4,7 @@ import { paymentFormSchema } from "@/schemas/paymentSchemas";
 
 export const addCustomerNavConfig: NavItem[] = [
   { id: 1, name: "Profile", icon: "/icons/customer-icon.svg" },
-  { id: 2, name: "Billing", icon: "/icons/mail-icon.svg" },
+  { id: 2, name: "Billing", icon: "/icons/billing-icon.svg" },
   { id: 3, name: "Shipping", icon: "/icons/shipping-icon.svg" },
   { id: 4, name: "Personal", icon: "/icons/personal-icon.svg" },
 ];

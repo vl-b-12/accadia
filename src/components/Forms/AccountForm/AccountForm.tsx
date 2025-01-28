@@ -92,18 +92,24 @@ const AccountForm = () => {
               isRequired={requiredFields.includes(field.name)}
             />
             <FormControl>
-              <Input
-                {...field}
-                autoComplete="off"
-                placeholder="Enter Phone Number"
-                className="h-[50px] py-2 pr-8 placeholder:text-base placeholder:font-medium placeholder:capitalize placeholder:text-gray-70 grow-1 border-violent-30"
-                onChange={(e) => {
-                  const value = e.target.value;
-                  if (/^\d*$/.test(value)) {
-                    field.onChange(e);
-                  }
-                }}
-              />
+              <>
+                <Input
+                  {...field}
+                  autoComplete="off"
+                  placeholder="Enter Phone Number"
+                  className="h-[50px] py-2 pr-8 placeholder:text-base placeholder:font-medium placeholder:capitalize placeholder:text-gray-70 grow-1 border-violent-30"
+                  onChange={(e) => {
+                    const value = e.target.value;
+                    if (/^\d*$/.test(value)) {
+                      field.onChange(e);
+                    }
+                  }}
+                />
+                <div className="text-xs font-medium">
+                  By providing your mobile phone number you agree to receive
+                  messages from “Jewelianna“. Message and data rates may apply
+                </div>
+              </>
             </FormControl>
             <FormMessage />
           </FormItem>

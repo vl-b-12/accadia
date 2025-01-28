@@ -78,7 +78,7 @@ const CreditCardForm = ({ type }: CreditCardFormProps) => {
                 <Input
                   {...field}
                   autoComplete="off"
-                  placeholder="Bank Name"
+                  placeholder="Card Type"
                   className="h-[50px] text-xl font-semibold py-2 pr-8 placeholder:text-base placeholder:font-medium placeholder:capitalize placeholder:text-gray-70 grow-1 border-violent-30 focus-visible:ring-0 focus-visible:ring-offset-0 focus-visible:border-violent-40"
                 />
               </FormControl>

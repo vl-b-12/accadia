@@ -165,14 +165,14 @@ const PaymentForm = ({
           <SelectItem value="full" hideCheckIcon>
             <PaymentSelectItem
               isActive={isFullType}
-              icon="/icons/wallet-icon.svg"
+              type="full"
               text="Full Payment With One System"
             />
           </SelectItem>
           <SelectItem value="split" hideCheckIcon>
             <PaymentSelectItem
+              type="split"
               isActive={!isFullType}
-              icon="/icons/coins-icon.svg"
               text="Split Payment Across Systems"
             />
           </SelectItem>

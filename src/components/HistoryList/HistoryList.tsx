@@ -1,4 +1,4 @@
-import React, { ForwardedRef, forwardRef } from "react";
+import React, { ForwardedRef, forwardRef, useState } from "react";
 import { cn, FetchFunction, formatPrice, handlePdfUpload } from "@/lib/utils";
 import {
   Accordion,
@@ -12,6 +12,20 @@ import PaymentMethodsSections from "@/components/PaymentMethodsSection/PaymentMe
 import Image from "next/image";
 import { useLazyGetInvoiceQuery } from "@/store/services/paymentsApi";
 import { useLazyGetCertificateQuery } from "@/store/services/productsApi";
+import {
+  Dialog,
+  DialogContent,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import ShareButton from "@/components/ShareButton/ShareButton";
 
 interface HistoryListProps {
   history: CustomerHistoryResponse[];
@@ -21,6 +35,9 @@ const cellStyle = "px-6 py-3";
 
 const HistoryList = forwardRef(
   ({ history }: HistoryListProps, ref: ForwardedRef<HTMLDivElement | null>) => {
+    const [selectOption, setSelectOption] = useState("");
+    const [isDialogOpenIndex, setIsDialogOpenIndex] = useState(-1);
+
     const [getInvoice] = useLazyGetInvoiceQuery();
     const [getCertificate] = useLazyGetCertificateQuery();
 
@@ -45,7 +62,7 @@ const HistoryList = forwardRef(
 
             return (
               <Accordion
-                key={historyItem.paymentId}
+                key={`${historyItem.paymentId}_${id}`}
                 type="multiple"
                 ref={isLastHistoryItem ? ref : null}
               >
@@ -80,7 +97,7 @@ const HistoryList = forwardRef(
                     {currencySymbol}
                     {tax}
                   </div>
-                  <div className={cn(cellStyle)}>
+                  <div className={cn("flex gap-6", cellStyle)}>
                     <Image
                       src="/icons/download-icon.svg"
                       width={24}
@@ -96,13 +113,91 @@ const HistoryList = forwardRef(
                         )
                       }
                     />
+
+                    <Dialog
+                      open={isDialogOpenIndex === id}
+                      onOpenChange={(isOpen) =>
+                        setIsDialogOpenIndex(isOpen ? id : -1)
+                      }
+                    >
+                      <DialogTrigger>
+                        <Image
+                          src="/icons/share-icon.svg"
+                          width={24}
+                          height={24}
+                          alt="download icon"
+                          unoptimized
+                          className={cn("cursor-pointer")}
+                        />
+                      </DialogTrigger>
+                      <DialogContent className="max-w-[576px] p-6 pt-16 flex flex-col gap-6">
+                        <DialogTitle className="text-xl font-bold text-violent-80 text-center">
+                          Share
+                        </DialogTitle>
+                        <Select
+                          onValueChange={setSelectOption}
+                          value={selectOption}
+                        >
+                          <SelectTrigger className="w-full border border-violent-40 text-violent-30 focus:outline-none focus:ring-0">
+                            <SelectValue placeholder="Select an option" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="invoice" hideCheckIcon>
+                              Jewelry Invoice
+                            </SelectItem>
+                          </SelectContent>
+                        </Select>
+
+                        <div className="grid grid-cols-3 gap-3">
+                          <ShareButton
+                            text="Send Email"
+                            icon="/icons/mail-icon.svg"
+                            onClick={async () => {
+                              await handlePdfUpload(
+                                getInvoice as FetchFunction,
+                                historyItem.paymentId.toString(),
+                                "invoice",
+                                "copy",
+                              );
+
+                              const link = await navigator.clipboard.readText();
+                              window.location.href = `mailto:?body=${encodeURIComponent(link)}`;
+
+                              setIsDialogOpenIndex(-1);
+                            }}
+                          />
+
+                          <ShareButton
+                            text="Copy URL"
+                            icon="/icons/globe-icon.svg"
+                            onClick={() => {
+                              handlePdfUpload(
+                                getInvoice as FetchFunction,
+                                historyItem.paymentId.toString(),
+                                "invoice",
+                                "copy",
+                              );
+
+                              setIsDialogOpenIndex(-1);
+                            }}
+                          />
+                          <ShareButton
+                            text="Send SMS"
+                            icon="/icons/send-icon.svg"
+                            onClick={() => {
+                              setIsDialogOpenIndex(-1);
+                            }}
+                          />
+                        </div>
+                      </DialogContent>
+                    </Dialog>
                   </div>
 
                   <AccordionContent className={cn(cellStyle)}>
                     <div className="flex flex-col gap-2.5">
-                      {historyItem.products.map((item) => (
+                      {historyItem.products.map((item, id) => (
                         <div
-                          key={item.sku}
+                          key={`${item.sku}_${id}`}
                           className="text-base font-medium underline cursor-pointer"
                           onClick={() =>
                             handlePdfUpload(

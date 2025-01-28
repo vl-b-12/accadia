@@ -14,8 +14,8 @@ import { useRouter } from "next/navigation";
 import { RootState } from "@/store/storeTypes";
 
 interface HistorySearchSectionProps {
-  selectedFilterOption: string | null;
-  setSelectedFilterOption: (selectedFilterOption: string | null) => void;
+  selectedFilterOption: string;
+  setSelectedFilterOption: (selectedFilterOption: string) => void;
 }
 
 const HistorySearchSection = ({
@@ -50,19 +50,19 @@ const HistorySearchSection = ({
       </div>
       <div>
         <Select
-          onValueChange={(value) =>
-            setSelectedFilterOption(
-              value === "Show All" ? null : selectedFilterOption,
-            )
-          }
+          onValueChange={setSelectedFilterOption}
+          value={selectedFilterOption}
         >
           <SelectTrigger className="w-[194px] border border-violent-40 text-violent-30">
-            <SelectValue placeholder="Show All" />
+            <SelectValue>
+              {
+                historySortOptions.find(
+                  (option) => option.id === selectedFilterOption,
+                )?.value
+              }
+            </SelectValue>
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="Show All" hideCheckIcon>
-              Show All
-            </SelectItem>
             {historySortOptions.map((option, id) => (
               <SelectItem
                 key={`${option.id}_${id}`}

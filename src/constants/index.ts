@@ -262,53 +262,8 @@ export const paymentFormDefaultValues: z.infer<typeof paymentFormSchema> = {
 };
 
 export const historySortOptions: { id: string; value: string }[] = [
-  { id: "1", value: "Sort orders by price (Low to High)" },
-  { id: "2", value: "Sort orders by price (High to Low)" },
-  { id: "3", value: "Sort orders by date (Oldest to Newest)" },
-  { id: "4", value: "Sort orders by date (Newest to Oldest)" },
+  { id: "price-asc", value: "Sort orders by price (Low to High)" },
+  { id: "price-desc", value: "Sort orders by price (High to Low)" },
+  { id: "date-asc", value: "Sort orders by date (Oldest to Newest)" },
+  { id: "date-desc", value: "Sort orders by date (Newest to Oldest)" },
 ];
-
-//TODO delete mock
-
-// export const mockHistory = [
-//   {
-//     paymentId: 1,
-//     purchaseDate: "2025-01-15",
-//     price: 100,
-//     taxes: 10,
-//     userCreditCardPayment: true,
-//     userCheckPayment: false,
-//     cashPayment: true,
-//     wirePayment: false,
-//     products: [
-//       {
-//         id: 101,
-//         price: 50,
-//       },
-//       {
-//         id: 102,
-//         price: 50,
-//       },
-//     ],
-//   },
-//   {
-//     paymentId: 2,
-//     purchaseDate: "2025-01-16",
-//     price: 200,
-//     taxes: 20,
-//     userCreditCardPayment: false,
-//     userCheckPayment: true,
-//     cashPayment: false,
-//     wirePayment: true,
-//     products: [
-//       {
-//         id: 201,
-//         price: 120,
-//       },
-//       {
-//         id: 202,
-//         price: 80,
-//       },
-//     ],
-//   },
-// ];

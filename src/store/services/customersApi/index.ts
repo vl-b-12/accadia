@@ -57,9 +57,9 @@ export interface CustomerHistoryResponse {
   price: number;
   taxes: number;
   userCreditCardPayment: boolean;
-  userCheckPayment: boolean;
-  cashPayment: boolean;
-  wirePayment: boolean;
+  useCheckPayment: boolean;
+  useCashPayment: boolean;
+  useWirePayment: boolean;
   products: ProductToSend[];
 }
 
@@ -77,7 +77,7 @@ export const customersApi = apiRtk.injectEndpoints({
   endpoints: (build) => ({
     getCustomers: build.query<
       TransformedCustomerResponse,
-      { name?: string; page?: number }
+      { name?: string; page?: number } | undefined
     >({
       query: (props) => ({
         url: "/customers",
@@ -115,6 +115,7 @@ export const customersApi = apiRtk.injectEndpoints({
         method: REQUEST.GET,
         params: { page, sort },
       }),
+      providesTags: ["customersHistory"],
     }),
   }),
 });

@@ -33,6 +33,7 @@ export const RTK_TAGS = {
   PRODUCTS: "products",
   CUSTOMERS: "customers",
   CUSTOMERS_SEARCH: "customersSearch",
+  CUSTOMERS_HISTORY: "customersHistory",
 } as const;
 
 const baseQuery = fetchBaseQuery({

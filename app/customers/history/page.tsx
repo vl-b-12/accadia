@@ -13,21 +13,18 @@ import { RootState } from "@/store/storeTypes";
 
 const HistoryPage = () => {
   const [page, setPage] = useState(1);
-  const [sort, setSort] = useState("asc");
   const lastHistoryItemRef = useRef<HTMLDivElement | null>(null);
   const [historyToShow, setHistoryToShow] = useState<CustomerHistoryResponse[]>(
     [],
   );
-  const [selectedFilterOption, setSelectedFilterOption] = useState<
-    string | null
-  >(null);
+  const [selectedFilterOption, setSelectedFilterOption] = useState("date-desc");
   const { selectedHistoryCustomer } = useSelector(
     (state: RootState) => state.customer,
   );
   const { data: history } = useGetHistoryQuery({
     customerId: selectedHistoryCustomer!.id.toString(),
     page,
-    sort,
+    sort: selectedFilterOption,
   });
 
   useEffect(() => {
@@ -47,19 +44,19 @@ const HistoryPage = () => {
       if (entry.isIntersecting && history?.hasNextPage) {
         setPage((prev) => prev + 1);
       }
-
-      const currentRef = lastHistoryItemRef.current;
-
-      if (currentRef) {
-        observer.observe(currentRef);
-      }
-
-      return () => {
-        if (currentRef) {
-          observer.unobserve(currentRef);
-        }
-      };
     });
+
+    const currentRef = lastHistoryItemRef.current;
+
+    if (currentRef) {
+      observer.observe(currentRef);
+    }
+
+    return () => {
+      if (currentRef) {
+        observer.unobserve(currentRef);
+      }
+    };
   }, [history?.hasNextPage, historyToShow]);
 
   return (
@@ -69,7 +66,7 @@ const HistoryPage = () => {
           selectedFilterOption={selectedFilterOption}
           setSelectedFilterOption={setSelectedFilterOption}
         />
-        <HistoryList history={historyToShow} />
+        <HistoryList history={historyToShow} ref={lastHistoryItemRef} />
       </PageSection>
     </div>
   );

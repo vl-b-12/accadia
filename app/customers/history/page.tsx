@@ -28,6 +28,10 @@ const HistoryPage = () => {
   });
 
   useEffect(() => {
+    setPage(1);
+  }, [selectedFilterOption]);
+
+  useEffect(() => {
     if (history?.items) {
       if (history?.page > 1) {
         setHistoryToShow((prevHistory) => [...prevHistory, ...history?.items]);

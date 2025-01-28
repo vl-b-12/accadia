@@ -56,7 +56,7 @@ export const paymentsApi = apiRtk.injectEndpoints({
         method: REQUEST.POST,
         body: props,
       }),
-      invalidatesTags: ["customersHistory"],
+      invalidatesTags: ["customersHistory", "customers"],
     }),
     getInvoice: build.query({
       query: (paymentId) => ({

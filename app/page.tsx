@@ -2,7 +2,6 @@
 
 import React, { useEffect, useRef, useState } from "react";
 import ProductCard from "@/components/ProductCard/ProductCard";
-import { redirect } from "next/navigation";
 import { useGetProductsQuery } from "@/store/services/productsApi";
 import { Product } from "@/types/types";
 import { useSelector } from "react-redux";
@@ -15,16 +14,6 @@ const HomePage = () => {
   const { selectedFilters } = useSelector((state: RootState) => state.filter);
 
   const { data: products } = useGetProductsQuery({ page, ...selectedFilters });
-  const isAuthenticated = sessionStorage.getItem("accessToken");
-
-  //TODO check auth later
-
-  useEffect(() => {
-    if (!isAuthenticated) {
-      sessionStorage.removeItem("accessToken");
-      redirect("/login");
-    }
-  }, [isAuthenticated]);
 
   useEffect(() => {
     setPage(1);

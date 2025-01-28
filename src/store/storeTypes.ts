@@ -8,16 +8,10 @@ export enum REQUEST {
 }
 
 export interface ServerError {
+  status: number | "CUSTOM_ERROR";
   data?: unknown;
-  status?: unknown;
-  message?: string;
-  error?: unknown;
+  error?: string;
 }
-
-// export interface ServerViolation {
-//     field: string;
-//     message: string;
-// }
 
 export type RootState = ReturnType<typeof store.getState>;
 

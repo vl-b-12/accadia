@@ -36,8 +36,9 @@ const LoginForm = () => {
   const handleSubmit = async (data: z.infer<typeof loginFormSchema>) => {
     const response = await signUp(data).unwrap();
 
-    if (response.accessToken) {
-      sessionStorage.setItem("accessToken", response.accessToken);
+    if (response.accessToken && response.refreshToken) {
+      sessionStorage.setItem("access_token", response.accessToken);
+      sessionStorage.setItem("refresh_token", response.refreshToken);
       dispatch(clearCart());
       push("/");
     }

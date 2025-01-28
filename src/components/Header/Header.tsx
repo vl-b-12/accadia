@@ -48,7 +48,8 @@ const Header = () => {
           <div
             className="flex items-center justify-center size-[66px] rounded-md bg-gray-10"
             onClick={() => {
-              sessionStorage.removeItem("accessToken");
+              sessionStorage.removeItem("access_token");
+              sessionStorage.removeItem("refresh_token");
               push("/login");
             }}
           >

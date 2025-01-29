@@ -9,7 +9,7 @@ import { usePathname, useRouter } from "next/navigation";
 import FilteringSection from "@/components/FilteringSection/FilteringSection";
 import { cn } from "@/lib/utils";
 
-const noHeaderPaths = ["/login"];
+const noHeaderPaths = ["/", "/login"];
 
 const Header = () => {
   const [isFiltersSectionOpen, setIsFiltersSectionOpen] = useState(false);
@@ -17,12 +17,12 @@ const Header = () => {
   const pathname = usePathname();
 
   useEffect(() => {
-    if (pathname !== "/") {
+    if (pathname !== "/catalog") {
       setIsFiltersSectionOpen(false);
     }
   }, [pathname]);
 
-  if (noHeaderPaths.includes(pathname)) return null;
+  if (noHeaderPaths.some((item) => item === pathname)) return null;
 
   return (
     <div className="fixed top-0 left-0 z-40 w-full bg-gray-0 flex gap-8 justify-between py-3 px-6 h-[90px]">
@@ -36,7 +36,7 @@ const Header = () => {
           "justify-end w-full": isFiltersSectionOpen,
         })}
       >
-        {pathname == "/" && (
+        {pathname === "/catalog" && (
           <FilteringSection
             isOpen={isFiltersSectionOpen}
             setOpen={setIsFiltersSectionOpen}

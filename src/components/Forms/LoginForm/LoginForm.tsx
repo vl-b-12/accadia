@@ -40,7 +40,7 @@ const LoginForm = () => {
       sessionStorage.setItem("access_token", response.accessToken);
       sessionStorage.setItem("refresh_token", response.refreshToken);
       dispatch(clearCart());
-      push("/");
+      push("/catalog");
     }
   };
 

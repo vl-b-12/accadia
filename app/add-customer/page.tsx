@@ -12,7 +12,7 @@ const AddCustomerPage = () => {
             Create New Customer
           </h1>
           <Link
-            href="/"
+            href="/catalog"
             className="text-xl font-semibold text-violent-60 underline underline-offset-1 decoration-1 text-end self-end"
           >
             Back To Catalog

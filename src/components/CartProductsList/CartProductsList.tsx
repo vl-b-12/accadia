@@ -14,7 +14,7 @@ const CartProductsList = () => {
 
   useEffect(() => {
     if (!products.length) {
-      push("/");
+      push("/catalog");
       dispatch(clearSelectedCustomer());
     }
   }, [products]);

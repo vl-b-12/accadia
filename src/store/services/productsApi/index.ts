@@ -42,4 +42,8 @@ export const productsApi = apiRtk.injectEndpoints({
   }),
 });
 
-export const { useGetProductsQuery, useLazyGetCertificateQuery } = productsApi;
+export const {
+  useGetProductsQuery,
+  useLazyGetProductsQuery,
+  useLazyGetCertificateQuery,
+} = productsApi;

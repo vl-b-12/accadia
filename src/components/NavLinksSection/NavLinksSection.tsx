@@ -10,13 +10,13 @@ const NavLinksSection = () => {
   return (
     <div className="flex gap-8">
       <NavLink
-        href="/"
+        href="/catalog"
         text="Catalog"
         iconWidth={24}
         iconHeight={24}
         icon="/icons/ring-icon.svg"
         activeIcon="/icons/ring-icon-active.svg"
-        isActive={pathname === "/"}
+        isActive={pathname === "/catalog"}
       />
       <NavLink
         href="/customers"

@@ -15,7 +15,7 @@ const CartPage = () => {
       </PageSection>
       <PageSection className="max-h-[calc(100vh-110px)] p-4 flex flex-col gap-6">
         <Link
-          href="/"
+          href="/catalog"
           className="text-xl font-semibold text-violent-60 underline underline-offset-1 decoration-1 text-end"
         >
           Back To Catalog

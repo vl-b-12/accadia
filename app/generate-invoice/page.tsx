@@ -8,7 +8,7 @@ const GenerateInvoicePage = () => {
     <div className="pb-4 px-6 pt-[106px] min-h-screen bg-gray-5">
       <PageSection className="p-6 min-h-[calc(100vh-122px)] relative">
         <Link
-          href="/"
+          href="/catalog"
           className="block w-full text-xl font-semibold text-violent-60 underline underline-offset-1 decoration-1 text-end"
         >
           Back To Catalog

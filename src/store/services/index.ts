@@ -5,7 +5,7 @@ import {
   fetchBaseQuery,
   FetchBaseQueryError,
 } from "@reduxjs/toolkit/query/react";
-import { REQUEST, ServerError } from "../storeTypes";
+import { REQUEST, ServerError } from "@/types/requestTypes";
 
 interface BaseQueryWithReAuthArgs {
   url: string;

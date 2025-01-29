@@ -1,4 +1,4 @@
-import { REQUEST } from "@/store/storeTypes";
+import { REQUEST } from "@/types/requestTypes";
 import { apiRtk } from "../";
 
 interface SignUp {

@@ -1,6 +1,6 @@
-import { REQUEST } from "@/store/storeTypes";
 import { apiRtk } from "../";
 import { Product } from "@/types/types";
+import { REQUEST } from "@/types/requestTypes";
 
 export interface ProductsResponse {
   items: Product[];

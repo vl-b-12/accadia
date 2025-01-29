@@ -1,7 +1,7 @@
-import { REQUEST } from "@/store/storeTypes";
 import { apiRtk } from "../";
 import { Customer } from "@/types/types";
 import { ProductToSend } from "@/store/services/paymentsApi";
+import { REQUEST } from "@/types/requestTypes";
 
 interface Pagination {
   page: number;

@@ -73,6 +73,15 @@ export interface CustomerHistoryQuery {
   sort?: string;
 }
 
+interface CompanyNameResponse {
+  companyName: string;
+}
+
+interface CountriesResponse {
+  id: number;
+  name: string;
+}
+
 export const customersApi = apiRtk.injectEndpoints({
   endpoints: (build) => ({
     getCustomers: build.query<
@@ -117,6 +126,18 @@ export const customersApi = apiRtk.injectEndpoints({
       }),
       providesTags: ["customersHistory"],
     }),
+    getCompanyName: build.query<CompanyNameResponse, void>({
+      query: () => ({
+        url: "/customers/get-company-name",
+        method: REQUEST.GET,
+      }),
+    }),
+    getCountries: build.query<CountriesResponse[], void>({
+      query: () => ({
+        url: "/customers/get-countries",
+        method: REQUEST.GET,
+      }),
+    }),
   }),
 });
 
@@ -125,4 +146,6 @@ export const {
   useCreateCustomerMutation,
   useLazyGetZipQuery,
   useGetHistoryQuery,
+  useGetCompanyNameQuery,
+  useGetCountriesQuery,
 } = customersApi;

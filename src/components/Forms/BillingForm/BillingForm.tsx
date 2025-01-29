@@ -14,9 +14,11 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { countries } from "@/constants";
 import CustomFormLabel from "@/components/Forms/CustomFormLabel/CustomFormLabel";
-import { useLazyGetZipQuery } from "@/store/services/customersApi";
+import {
+  useGetCountriesQuery,
+  useLazyGetZipQuery,
+} from "@/store/services/customersApi";
 import { useDebounce } from "@/hooks/useDebounce";
 import { cn } from "@/lib/utils";
 
@@ -25,12 +27,17 @@ const requiredFields = ["street1", "state", "city", "zipCode", "country"];
 const BillingForm = () => {
   const form = useFormContext();
   const [getZip] = useLazyGetZipQuery();
+  const { data: countries } = useGetCountriesQuery();
+  const usCountryCode = countries?.find(
+    (country) => country?.name === "U.S.A",
+  )?.id;
 
   const zipCode = form.watch("zipCode");
   const debouncedZipCode = useDebounce(zipCode, 500);
 
   const handleGetZip = async () => {
     const response = await getZip(debouncedZipCode);
+
     form.setValue("state", response.data?.stateName, {
       shouldTouch: true,
       shouldValidate: !!response.data?.stateName,
@@ -39,10 +46,16 @@ const BillingForm = () => {
       shouldTouch: true,
       shouldValidate: !!response.data?.city,
     });
-    form.setValue("country", response.data?.stateName ? "US" : "", {
-      shouldTouch: true,
-      shouldValidate: !!(response.data?.stateName ? "US" : ""),
-    });
+    form.setValue(
+      "country",
+      response.data?.stateName ? String(usCountryCode) : "",
+      {
+        shouldTouch: true,
+        shouldValidate: !!(response.data?.stateName
+          ? String(usCountryCode)
+          : ""),
+      },
+    );
   };
 
   useEffect(() => {
@@ -186,8 +199,8 @@ const BillingForm = () => {
                 </SelectTrigger>
               </FormControl>
               <SelectContent>
-                {countries.map((country, index) => (
-                  <SelectItem key={index} value={country.code}>
+                {countries?.map((country, index) => (
+                  <SelectItem key={index} value={String(country.id)}>
                     {country.name}
                   </SelectItem>
                 ))}

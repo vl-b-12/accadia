@@ -15,10 +15,12 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { countries } from "@/constants";
 import { Checkbox } from "@/components/ui/checkbox";
 import CustomFormLabel from "@/components/Forms/CustomFormLabel/CustomFormLabel";
-import { useLazyGetZipQuery } from "@/store/services/customersApi";
+import {
+  useGetCountriesQuery,
+  useLazyGetZipQuery,
+} from "@/store/services/customersApi";
 import { useDebounce } from "@/hooks/useDebounce";
 import { cn } from "@/lib/utils";
 
@@ -35,6 +37,10 @@ const ShippingForm = () => {
   const autoFill = form.watch("sameAsMailing");
   const hasRequiredFields = form.getValues("zipCode");
   const [getZip] = useLazyGetZipQuery();
+  const { data: countries } = useGetCountriesQuery();
+  const usCountryCode = countries?.find(
+    (country) => country?.name === "U.S.A",
+  )?.id;
   const shouldWatchZip = useRef(true);
 
   const zipCode = form.watch("shippingZipCode");
@@ -50,10 +56,16 @@ const ShippingForm = () => {
       shouldTouch: true,
       shouldValidate: !!response.data?.city,
     });
-    form.setValue("shippingCountry", response.data?.stateName ? "US" : "", {
-      shouldTouch: true,
-      shouldValidate: !!(response.data?.stateName ? "US" : ""),
-    });
+    form.setValue(
+      "shippingCountry",
+      response.data?.stateName ? String(usCountryCode) : "",
+      {
+        shouldTouch: true,
+        shouldValidate: !!(response.data?.stateName
+          ? String(usCountryCode)
+          : ""),
+      },
+    );
   };
 
   useEffect(() => {
@@ -252,8 +264,8 @@ const ShippingForm = () => {
                 </SelectTrigger>
               </FormControl>
               <SelectContent>
-                {countries.map((country, index) => (
-                  <SelectItem key={index} value={country.code}>
+                {countries?.map((country, index) => (
+                  <SelectItem key={index} value={String(country.id)}>
                     {country.name}
                   </SelectItem>
                 ))}

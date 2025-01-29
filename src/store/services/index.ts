@@ -14,7 +14,7 @@ interface BaseQueryWithReAuthArgs {
 }
 
 interface ReAuthResult {
-  data?: { access_token: string };
+  data?: { accessToken: string; refreshToken: string };
   error?: FetchBaseQueryError;
 }
 
@@ -25,6 +25,12 @@ type BaseQueryWithReAuthFn = BaseQueryFn<
 >;
 
 const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "/";
+
+const logout = () => {
+  sessionStorage.removeItem("access_token");
+  sessionStorage.removeItem("refresh_token");
+  window.location.href = "/login";
+};
 
 export const RTK_TAGS = {
   PRODUCTS: "products",
@@ -70,14 +76,16 @@ export const baseQueryWithReAuth: BaseQueryWithReAuthFn = async (
       )) as unknown as ReAuthResult;
 
       if (refreshResult.data) {
-        sessionStorage.setItem("access_token", refreshResult.data.access_token);
+        sessionStorage.setItem("access_token", refreshResult.data.accessToken);
 
         result = await baseQuery(args, store, extraOptions);
       } else {
         console.error("Failed to refresh token:", refreshResult.error);
+        logout();
       }
     } else {
       console.warn("No refresh token found. Logging out...");
+      logout();
     }
   }
 

@@ -22,7 +22,7 @@ const CustomersList = forwardRef(
     const dispatch = useDispatch();
 
     return (
-      <div className="pt-6 px-6">
+      <div className="pt-6 px-6 overflow-y-auto">
         <div className="grid grid-cols-[2fr_2fr_2fr_2fr_1fr] gap-2 text-base font-medium text-gray-70 border-b border-b-violent-30">
           <div className={cn(cellStyle)}>Name</div>
           <div className={cn(cellStyle)}>Address</div>

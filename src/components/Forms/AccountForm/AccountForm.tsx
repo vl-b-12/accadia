@@ -8,11 +8,14 @@ import {
 import { Input } from "@/components/ui/input";
 import { useFormContext } from "react-hook-form";
 import CustomFormLabel from "@/components/Forms/CustomFormLabel/CustomFormLabel";
+import { useGetCompanyNameQuery } from "@/store/services/customersApi";
 
 const requiredFields = ["firstName", "lastName", "email", "phoneNumber"];
 
 const AccountForm = () => {
   const form = useFormContext();
+
+  const { data } = useGetCompanyNameQuery();
 
   return (
     <>
@@ -107,7 +110,8 @@ const AccountForm = () => {
                 />
                 <div className="text-xs font-medium">
                   By providing your mobile phone number you agree to receive
-                  messages from “Jewelianna“. Message and data rates may apply
+                  messages from “{data?.companyName}“. Message and data rates
+                  may apply
                 </div>
               </>
             </FormControl>

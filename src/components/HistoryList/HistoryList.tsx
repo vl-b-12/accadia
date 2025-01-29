@@ -7,7 +7,6 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { CustomerHistoryResponse } from "@/store/services/customersApi";
-import { format } from "date-fns";
 import PaymentMethodsSections from "@/components/PaymentMethodsSection/PaymentMethodsSections";
 import Image from "next/image";
 import { useLazyGetInvoiceQuery } from "@/store/services/paymentsApi";
@@ -79,7 +78,7 @@ const HistoryList = forwardRef(
                     </div>
                   </AccordionTrigger>
                   <div className={cn(cellStyle)}>
-                    {format(historyItem.purchaseDate, "dd.MM.yyyy")}
+                    {new Date(historyItem.purchaseDate).toLocaleDateString()}
                   </div>
                   <div className={cn(cellStyle)}>
                     <PaymentMethodsSections

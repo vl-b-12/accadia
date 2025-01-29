@@ -59,7 +59,7 @@ const CustomersPage = () => {
   }, [customers?.hasNextPage, customersToShow]);
 
   return (
-    <div className="pb-4 px-6 pt-[106px] min-h-screen bg-gray-5">
+    <div className="pb-4 px-6 pt-[106px] min-h-screen bg-gray-5 overflow-y-hidden">
       <PageSection className="px-3 py-4 min-h-[calc(100vh-122px)] relative">
         <CustomersSearchSection
           search={search}

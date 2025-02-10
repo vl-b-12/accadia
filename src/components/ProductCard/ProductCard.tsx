@@ -144,7 +144,7 @@ const ProductCard = forwardRef(
           </VisuallyHidden>
           <div className="relative w-[442px] h-[378px] mx-auto">
             <Image
-              src={product.image || "/mocks/product-image.png"}
+              src={product.imageFull || "/mocks/product-image.png"}
               alt="Product Image"
               fill
               className="object-contain"

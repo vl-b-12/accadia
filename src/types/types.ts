@@ -4,6 +4,7 @@ export interface Product {
   description: string;
   goldWeight: number;
   image: string;
+  imageFull: string;
   jewelryType: string;
   name: string;
   price: number;

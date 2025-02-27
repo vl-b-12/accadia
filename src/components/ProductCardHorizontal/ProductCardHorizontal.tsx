@@ -2,7 +2,7 @@ import React from "react";
 import { Product } from "@/types/types";
 import Image from "next/image";
 import SkuBullet from "@/components/SkuBullet/SkuBullet";
-import KaratsBullet from "@/components/KaratsBullet/KaratsBullet";
+// import KaratsBullet from "@/components/KaratsBullet/KaratsBullet";
 import { useDispatch } from "react-redux";
 import { deleteProductFromCart } from "@/store/slices/CartSlice/cartSlice";
 import { formatPrice } from "@/lib/utils";
@@ -41,7 +41,7 @@ const ProductCardHorizontal = ({ product }: ProductCardHorizontalProps) => {
           </div>
         </div>
         <div className="flex flex-col gap-1.5 grow">
-          <KaratsBullet karats={product.karats ?? "12"} type="horizontal" />
+          {/*<KaratsBullet karats={product.karats ?? "12"} type="horizontal" />*/}
           {product?.descriptionData?.map((characteristic, index) => (
             <div
               key={index}

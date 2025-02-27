@@ -12,7 +12,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import SkuBullet from "@/components/SkuBullet/SkuBullet";
-import KaratsBullet from "@/components/KaratsBullet/KaratsBullet";
+// import KaratsBullet from "@/components/KaratsBullet/KaratsBullet";
 import { cn, formatPrice } from "@/lib/utils";
 import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
 import { RootState } from "@/store/storeTypes";
@@ -33,7 +33,7 @@ const ProductInfo = ({
       {product.collection}
     </h2>
     <h3 className="text-sm font-medium mb-1.5 text-left">{product.name}</h3>
-    <KaratsBullet karats="12" />
+    {/*<KaratsBullet karats="12" />*/}
     {isDialogOpen && (
       <div className="flex flex-col gap-1.5">
         {product.descriptionData.map((description, id) => (

@@ -54,13 +54,14 @@ const ProductCardHorizontal = ({ product }: ProductCardHorizontalProps) => {
             </div>
           ))}
         </div>
-        <div className="flex flex-col justify-between" onClick={handleDelete}>
+        <div className="flex flex-col justify-between">
           <Image
             src="/icons/delete-icon.svg"
             alt="Product Image"
             width={32}
             height={32}
             className="self-end cursor-pointer"
+            onClick={handleDelete}
           />
 
           <div className="text-xl font-light">

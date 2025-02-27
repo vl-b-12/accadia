@@ -53,13 +53,16 @@ export const handlePdfUpload = async (
   type: "copy" | "download" = "download",
 ) => {
   const res = await fetchFunction(parameter);
+
   const a = document.createElement("a");
   document.body.appendChild(a);
   const url = window.URL.createObjectURL(res.data);
-  console.log(url);
 
   if (type === "copy") {
-    navigator.clipboard.writeText(url.replace("blob:", ""));
+    const transformedInvoiceLink = url.replace("blob:", "").split("/");
+    navigator.clipboard.writeText(
+      `${window.origin}/api/payments/get-invoice/${transformedInvoiceLink[transformedInvoiceLink.length - 1]}`,
+    );
   } else {
     a.href = url;
     a.download = res.data.filename || filename;

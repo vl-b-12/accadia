@@ -138,10 +138,18 @@ export const customersApi = apiRtk.injectEndpoints({
         method: REQUEST.GET,
       }),
     }),
+    shareSms: build.mutation({
+      query: (props) => ({
+        url: "/customers/share-sms",
+        method: REQUEST.POST,
+        body: props,
+      }),
+    }),
   }),
 });
 
 export const {
+  useShareSmsMutation,
   useGetCustomersQuery,
   useCreateCustomerMutation,
   useLazyGetZipQuery,
@@ -149,3 +157,5 @@ export const {
   useGetCompanyNameQuery,
   useGetCountriesQuery,
 } = customersApi;
+
+// http://localhost:3000/d9fa71bd-42bf-41dd-8623-c722b6ec50b9

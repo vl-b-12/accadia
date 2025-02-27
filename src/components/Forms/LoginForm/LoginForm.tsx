@@ -107,7 +107,7 @@ const LoginForm = () => {
         </form>
 
         <div className="flex gap-4">
-          <span className="text-xs font-medium">Powered</span>
+          <span className="text-xs font-medium">Powered by</span>
           <Image
             src="/images/accadia-logo.svg"
             alt="Accadia logo"

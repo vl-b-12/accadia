@@ -82,6 +82,11 @@ interface CountriesResponse {
   name: string;
 }
 
+interface ShareSMSRequest {
+  phoneTo: string;
+  messageBody: string;
+}
+
 export const customersApi = apiRtk.injectEndpoints({
   endpoints: (build) => ({
     getCustomers: build.query<
@@ -138,7 +143,7 @@ export const customersApi = apiRtk.injectEndpoints({
         method: REQUEST.GET,
       }),
     }),
-    shareSms: build.mutation({
+    shareSms: build.mutation<unknown, ShareSMSRequest>({
       query: (props) => ({
         url: "/customers/share-sms",
         method: REQUEST.POST,

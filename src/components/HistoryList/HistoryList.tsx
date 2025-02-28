@@ -6,7 +6,10 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { CustomerHistoryResponse } from "@/store/services/customersApi";
+import {
+  CustomerHistoryResponse,
+  useShareSmsMutation,
+} from "@/store/services/customersApi";
 import PaymentMethodsSections from "@/components/PaymentMethodsSection/PaymentMethodsSections";
 import Image from "next/image";
 import { useLazyGetInvoiceQuery } from "@/store/services/paymentsApi";
@@ -25,6 +28,8 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import ShareButton from "@/components/ShareButton/ShareButton";
+import { useSelector } from "react-redux";
+import { RootState } from "@/store/storeTypes";
 
 interface HistoryListProps {
   history: CustomerHistoryResponse[];
@@ -36,9 +41,15 @@ const HistoryList = forwardRef(
   ({ history }: HistoryListProps, ref: ForwardedRef<HTMLDivElement | null>) => {
     const [selectOption, setSelectOption] = useState("");
     const [isDialogOpenIndex, setIsDialogOpenIndex] = useState(-1);
+    const { selectedCustomer } = useSelector(
+      (state: RootState) => state.customer,
+    );
 
     const [getInvoice] = useLazyGetInvoiceQuery();
     const [getCertificate] = useLazyGetCertificateQuery();
+    const [shareSms] = useShareSmsMutation();
+
+    console.log(selectedCustomer, "selectedCustomer");
 
     return (
       <div className="pt-6 px-6">
@@ -183,7 +194,23 @@ const HistoryList = forwardRef(
                           <ShareButton
                             text="Send SMS"
                             icon="/icons/send-icon.svg"
-                            onClick={() => {
+                            onClick={async () => {
+                              handlePdfUpload(
+                                getInvoice as FetchFunction,
+                                historyItem.paymentId.toString(),
+                                "invoice",
+                                "copy",
+                              );
+
+                              const link = await navigator.clipboard.readText();
+
+                              if (selectedCustomer?.phoneNumber) {
+                                await shareSms({
+                                  phoneTo: selectedCustomer.phoneNumber,
+                                  messageBody: `Download invoice from ${link}`,
+                                });
+                              }
+
                               setIsDialogOpenIndex(-1);
                             }}
                           />

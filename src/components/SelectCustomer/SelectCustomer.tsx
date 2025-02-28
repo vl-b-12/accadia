@@ -70,12 +70,12 @@ const SelectCustomer = ({ step, setStep }: SelectCustomerProps) => {
                     }}
                     className="cursor-pointer"
                   />
-                  <Image
-                    src="/icons/gb-flag-icon.svg"
-                    alt="flag icon"
-                    width={20}
-                    height={20}
-                  />
+                  {/*<Image*/}
+                  {/*  src="/icons/gb-flag-icon.svg"*/}
+                  {/*  alt="flag icon"*/}
+                  {/*  width={20}*/}
+                  {/*  height={20}*/}
+                  {/*/>*/}
                 </div>
               </div>
             )}

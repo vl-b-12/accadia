@@ -1,5 +1,5 @@
-import React, { ForwardedRef, forwardRef, useState } from "react";
-import { cn, FetchFunction, formatPrice, handlePdfUpload } from "@/lib/utils";
+import React, { ForwardedRef, forwardRef, useMemo, useState } from "react";
+import { cn, formatPrice, handlePdfUpload } from "@/lib/utils";
 import {
   Accordion,
   AccordionContent,
@@ -8,12 +8,12 @@ import {
 } from "@/components/ui/accordion";
 import {
   CustomerHistoryResponse,
+  GetDocumentLinksResponse,
+  useLazyGetDocumentLinksQuery,
   useShareSmsMutation,
 } from "@/store/services/customersApi";
 import PaymentMethodsSections from "@/components/PaymentMethodsSection/PaymentMethodsSections";
 import Image from "next/image";
-import { useLazyGetInvoiceQuery } from "@/store/services/paymentsApi";
-import { useLazyGetCertificateQuery } from "@/store/services/productsApi";
 import {
   Dialog,
   DialogContent,
@@ -45,11 +45,14 @@ const HistoryList = forwardRef(
       (state: RootState) => state.customer,
     );
 
-    const [getInvoice] = useLazyGetInvoiceQuery();
-    const [getCertificate] = useLazyGetCertificateQuery();
     const [shareSms] = useShareSmsMutation();
+    const [getDocumentLinks, { data: documentLinks }] =
+      useLazyGetDocumentLinksQuery();
 
-    console.log(selectedCustomer, "selectedCustomer");
+    const selectedOptionLink = useMemo(
+      () => documentLinks?.find((option) => option.title === selectOption)?.url,
+      [selectOption, documentLinks],
+    );
 
     return (
       <div className="pt-6 px-6">
@@ -57,7 +60,7 @@ const HistoryList = forwardRef(
           <div className={cn(cellStyle)}>Order</div>
           <div className={cn(cellStyle)}>Purchase Day</div>
           <div className={cn(cellStyle)}>Payment Methods</div>
-          <div className={cn(cellStyle)}>Price</div>
+          <div className={cn(cellStyle)}>Total</div>
           <div className={cn(cellStyle)}>Taxes</div>
           <div className={cn(cellStyle)}>Actions</div>
         </div>
@@ -115,20 +118,25 @@ const HistoryList = forwardRef(
                       alt="download icon"
                       unoptimized
                       className={cn("cursor-pointer")}
-                      onClick={() =>
-                        handlePdfUpload(
-                          getInvoice as FetchFunction,
-                          historyItem.paymentId.toString(),
-                          "invoice",
-                        )
-                      }
+                      onClick={() => {
+                        if (documentLinks?.length) {
+                          const invoiceLink = documentLinks.find(
+                            (link) => link.title === "Jewelry Invoice",
+                          )?.url;
+
+                          if (invoiceLink) {
+                            handlePdfUpload(invoiceLink, "invoice.pdf");
+                          }
+                        }
+                      }}
                     />
 
                     <Dialog
                       open={isDialogOpenIndex === id}
-                      onOpenChange={(isOpen) =>
-                        setIsDialogOpenIndex(isOpen ? id : -1)
-                      }
+                      onOpenChange={async (isOpen) => {
+                        setIsDialogOpenIndex(isOpen ? id : -1);
+                        await getDocumentLinks(id);
+                      }}
                     >
                       <DialogTrigger>
                         <Image
@@ -152,26 +160,31 @@ const HistoryList = forwardRef(
                             <SelectValue placeholder="Select an option" />
                           </SelectTrigger>
                           <SelectContent>
-                            <SelectItem value="invoice" hideCheckIcon>
-                              Jewelry Invoice
-                            </SelectItem>
+                            {documentLinks?.map(
+                              (
+                                documentLink: GetDocumentLinksResponse,
+                                index: number,
+                              ) => (
+                                <SelectItem
+                                  key={index}
+                                  value={documentLink.title}
+                                  hideCheckIcon
+                                >
+                                  {documentLink.title}
+                                </SelectItem>
+                              ),
+                            )}
                           </SelectContent>
                         </Select>
 
-                        <div className="grid grid-cols-3 gap-3">
+                        <div className="grid grid-cols-4 gap-3">
                           <ShareButton
                             text="Send Email"
                             icon="/icons/mail-icon.svg"
                             onClick={async () => {
-                              await handlePdfUpload(
-                                getInvoice as FetchFunction,
-                                historyItem.paymentId.toString(),
-                                "invoice",
-                                "copy",
-                              );
-
-                              const link = await navigator.clipboard.readText();
-                              window.location.href = `mailto:?body=${encodeURIComponent(link)}`;
+                              if (selectedOptionLink) {
+                                window.location.href = `mailto:?body=${encodeURIComponent(selectedOptionLink)}`;
+                              }
 
                               setIsDialogOpenIndex(-1);
                             }}
@@ -180,13 +193,32 @@ const HistoryList = forwardRef(
                           <ShareButton
                             text="Copy URL"
                             icon="/icons/globe-icon.svg"
-                            onClick={() => {
-                              handlePdfUpload(
-                                getInvoice as FetchFunction,
-                                historyItem.paymentId.toString(),
-                                "invoice",
-                                "copy",
-                              );
+                            onClick={async () => {
+                              if (selectedOptionLink) {
+                                try {
+                                  await navigator.clipboard.writeText(
+                                    selectedOptionLink,
+                                  );
+                                } catch (err) {
+                                  console.error("Clipboard copy error:", err);
+                                }
+                              }
+
+                              setIsDialogOpenIndex(-1);
+                            }}
+                          />
+
+                          <ShareButton
+                            text="Preview"
+                            icon="/icons/preview-icon.svg"
+                            onClick={async () => {
+                              if (selectedOptionLink) {
+                                window.open(
+                                  selectedOptionLink,
+                                  "_blank",
+                                  "noopener,noreferrer",
+                                );
+                              }
 
                               setIsDialogOpenIndex(-1);
                             }}
@@ -195,19 +227,13 @@ const HistoryList = forwardRef(
                             text="Send SMS"
                             icon="/icons/send-icon.svg"
                             onClick={async () => {
-                              handlePdfUpload(
-                                getInvoice as FetchFunction,
-                                historyItem.paymentId.toString(),
-                                "invoice",
-                                "copy",
-                              );
-
-                              const link = await navigator.clipboard.readText();
-
-                              if (selectedCustomer?.phoneNumber) {
+                              if (
+                                selectedCustomer?.phoneNumber &&
+                                selectedOptionLink
+                              ) {
                                 await shareSms({
                                   phoneTo: selectedCustomer.phoneNumber,
-                                  messageBody: `Download invoice from ${link}`,
+                                  messageBody: `Download invoice from ${selectedOptionLink}`,
                                 });
                               }
 
@@ -225,13 +251,18 @@ const HistoryList = forwardRef(
                         <div
                           key={`${item.sku}_${id}`}
                           className="text-base font-medium underline cursor-pointer"
-                          onClick={() =>
-                            handlePdfUpload(
-                              getCertificate as FetchFunction,
-                              item.sku,
-                              "certificate",
-                            )
-                          }
+                          onClick={() => {
+                            if (documentLinks?.length) {
+                              const invoiceLink = documentLinks?.find(
+                                (link) =>
+                                  link.title === "POS Certificate of Appraisal",
+                              )?.url;
+
+                              if (invoiceLink) {
+                                handlePdfUpload(invoiceLink, "invoice.pdf");
+                              }
+                            }
+                          }}
                         >
                           {item.name}
                         </div>

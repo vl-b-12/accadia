@@ -64,7 +64,7 @@ const CustomersPage = () => {
         <CustomersSearchSection
           search={search}
           setSearch={setSearch}
-          customers={customersToShow}
+          totalCustomersCount={customers?.totalCount}
         />
         <CustomersList customers={customersToShow} ref={lastCustomerItemRef} />
       </PageSection>

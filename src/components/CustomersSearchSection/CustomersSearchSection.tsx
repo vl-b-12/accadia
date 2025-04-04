@@ -2,25 +2,24 @@ import React from "react";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import { Input } from "@/components/ui/input";
-import { Customer } from "@/types/types";
 import { useRouter } from "next/navigation";
 
 interface CustomersSearchSectionProps {
   search: string;
   setSearch: (search: string) => void;
-  customers?: Customer[];
+  totalCustomersCount?: number;
 }
 
 const CustomersSearchSection = ({
   search,
   setSearch,
-  customers,
+  totalCustomersCount = 0,
 }: CustomersSearchSectionProps) => {
   const { push } = useRouter();
   return (
     <div className="p-6 flex justify-between gap-10 items-center">
       <div className="text-2xl font-medium">
-        Customers: {customers?.length || 0}
+        Customers: {totalCustomersCount}
       </div>
       <div className="flex gap-6">
         <div className="relative">

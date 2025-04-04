@@ -58,16 +58,6 @@ export const paymentsApi = apiRtk.injectEndpoints({
       }),
       invalidatesTags: ["customersHistory", "customers"],
     }),
-    getInvoice: build.query({
-      query: (paymentId) => ({
-        url: `/payments/get-invoice/${paymentId}`,
-        method: REQUEST.GET,
-        responseHandler: (res) => res.blob(),
-        headers: {
-          "Accept-type": "application/pdf",
-        },
-      }),
-    }),
   }),
 });
 

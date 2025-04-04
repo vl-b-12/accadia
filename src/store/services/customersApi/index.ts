@@ -87,6 +87,11 @@ interface ShareSMSRequest {
   messageBody: string;
 }
 
+export interface GetDocumentLinksResponse {
+  title: string;
+  url: string;
+}
+
 export const customersApi = apiRtk.injectEndpoints({
   endpoints: (build) => ({
     getCustomers: build.query<
@@ -150,6 +155,12 @@ export const customersApi = apiRtk.injectEndpoints({
         body: props,
       }),
     }),
+    getDocumentLinks: build.query<GetDocumentLinksResponse[], number>({
+      query: (id) => ({
+        url: `customers/document-links/${id}`,
+        method: REQUEST.GET,
+      }),
+    }),
   }),
 });
 
@@ -161,6 +172,5 @@ export const {
   useGetHistoryQuery,
   useGetCompanyNameQuery,
   useGetCountriesQuery,
+  useLazyGetDocumentLinksQuery,
 } = customersApi;
-
-// http://localhost:3000/d9fa71bd-42bf-41dd-8623-c722b6ec50b9

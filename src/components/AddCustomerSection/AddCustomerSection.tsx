@@ -89,14 +89,22 @@ const AddCustomerSection = () => {
     if (step !== 4) {
       setStep((prev) => prev + 1);
     } else {
-      dispatch(
-        selectCustomer({
-          ...newCustomer,
-          fullName: `${newCustomer.firstName} ${newCustomer.lastName}`,
-        }),
-      );
-      await createCustomer(newCustomer);
-      push("/cart");
+      try {
+        const createdCustomer = await createCustomer(newCustomer);
+
+        if (createdCustomer?.data?.id) {
+          dispatch(
+            selectCustomer({
+              ...newCustomer,
+              fullName: `${newCustomer.firstName} ${newCustomer.lastName}`,
+              id: createdCustomer.data.id,
+            }),
+          );
+          push("/cart");
+        }
+      } catch (error) {
+        console.log("Error:", error);
+      }
     }
   };
 

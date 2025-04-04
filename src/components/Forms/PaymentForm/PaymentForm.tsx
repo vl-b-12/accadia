@@ -34,7 +34,10 @@ import {
 import { cn } from "@/lib/utils";
 import { z } from "zod";
 import { useCreatePaymentMutation } from "@/store/services/paymentsApi";
-import { clearSelectedCustomer } from "@/store/slices/CustomerSlice/customerSlice";
+import {
+  clearSelectedCustomer,
+  setSelectedHistoryCustomer,
+} from "@/store/slices/CustomerSlice/customerSlice";
 
 interface PaymentFormProps {
   type: PaymentType;
@@ -119,10 +122,16 @@ const PaymentForm = ({
       }),
     };
 
-    await createPayment(dataToSend);
-    dispatch(clearCart());
-    dispatch(clearSelectedCustomer());
-    push("/generate-invoice");
+    try {
+      await createPayment(dataToSend);
+      dispatch(clearCart());
+      dispatch(setSelectedHistoryCustomer(selectedCustomer));
+      dispatch(clearSelectedCustomer());
+    } catch (error) {
+      console.log("Error:", error);
+    }
+
+    push("/customers/history");
   };
 
   useEffect(() => {

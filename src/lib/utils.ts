@@ -42,34 +42,16 @@ export const formatDecimalInput = (input: string): string => {
   return value;
 };
 
-export type FetchFunction = (
-  parameter: string,
-) => Promise<{ data: Blob & { filename: string } }>;
-
-export const handlePdfUpload = async (
-  fetchFunction: FetchFunction,
-  parameter: string,
-  filename = "",
-  type: "copy" | "download" = "download",
-) => {
-  const res = await fetchFunction(parameter);
-
+export const handlePdfUpload = (url: string, filename = "") => {
   const a = document.createElement("a");
   document.body.appendChild(a);
-  const url = window.URL.createObjectURL(res.data);
 
-  if (type === "copy") {
-    const transformedInvoiceLink = url.replace("blob:", "").split("/");
-    navigator.clipboard.writeText(
-      `${window.origin}/api/payments/get-invoice/${transformedInvoiceLink[transformedInvoiceLink.length - 1]}`,
-    );
-  } else {
-    a.href = url;
-    a.download = res.data.filename || filename;
-    a.click();
-    setTimeout(() => {
-      window.URL.revokeObjectURL(url);
-      document.body.removeChild(a);
-    }, 0);
-  }
+  const documentName = url.split("/").pop();
+
+  a.href = url;
+  a.download = documentName || filename;
+  a.click();
+  setTimeout(() => {
+    document.body.removeChild(a);
+  }, 0);
 };

@@ -42,7 +42,7 @@ export const cartSlice = createSlice({
     },
     clearCart: () => initialState,
     setTax: (state, { payload }) => {
-      state.tax = payload;
+      state.tax = Number(payload);
     },
     setPaid: (state, { payload }) => {
       state.balanceDue = Number((state.grandTotal - payload).toFixed(2));
@@ -63,8 +63,7 @@ export const cartSlice = createSlice({
       (action) =>
         action.type.endsWith("addProductToCart") ||
         action.type.endsWith("deleteProductFromCart") ||
-        action.type.endsWith("clearCart") ||
-        action.type.endsWith("setTax"),
+        action.type.endsWith("clearCart"),
       (state) => {
         state.totalPrice = state.cart.reduce(
           (total, product) => total + product.price,

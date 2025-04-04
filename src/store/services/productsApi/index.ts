@@ -29,21 +29,7 @@ export const productsApi = apiRtk.injectEndpoints({
         params: { page, sku, code, collection, name, jewelryType },
       }),
     }),
-    getCertificate: build.query({
-      query: (sku: string) => ({
-        url: `/catalog/get-certificate/${sku}`,
-        method: REQUEST.GET,
-        responseHandler: (res) => res.blob(),
-        headers: {
-          "Accept-type": "application/pdf",
-        },
-      }),
-    }),
   }),
 });
 
-export const {
-  useGetProductsQuery,
-  useLazyGetProductsQuery,
-  useLazyGetCertificateQuery,
-} = productsApi;
+export const { useGetProductsQuery } = productsApi;

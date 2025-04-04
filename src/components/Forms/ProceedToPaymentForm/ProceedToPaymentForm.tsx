@@ -24,18 +24,20 @@ import {
 import { formatPrice } from "@/lib/utils";
 import { useRouter } from "next/navigation";
 
+type calculatorFormFields = "discount" | "amount" | "tax" | "taxPercent";
+
 const ProceedToPaymentForm = () => {
   const { push } = useRouter();
   const dispatch = useDispatch();
-  const [isUpdating, setIsUpdating] = useState<"discount" | "amount" | null>(
+  const [isUpdating, setIsUpdating] = useState<calculatorFormFields | null>(
     null,
   );
-  const [isInputChanged, setIsInputChanged] = useState(false);
   const { totalPrice } = useSelector((state: RootState) => state.cart);
   const form = useFormContext();
   const discount = form.watch("discount");
   const amount = form.watch("amount");
   const tax = form.watch("tax");
+  const taxPercent = form.watch("taxPercent");
 
   const { currencySymbol, price } = formatPrice(totalPrice?.toString());
 
@@ -48,15 +50,17 @@ const ProceedToPaymentForm = () => {
     field,
     max = Infinity,
     min = 0,
-    changed,
   }: {
     e: ChangeEvent<HTMLInputElement>;
     field: ControllerRenderProps;
     max?: number;
     min?: number;
-    changed?: boolean;
   }) => {
     let value = e.target.value;
+
+    if (value) {
+      setIsUpdating(field.name as calculatorFormFields);
+    }
 
     if (!/^\d*\.?\d{0,2}$/.test(value)) {
       return;
@@ -78,10 +82,6 @@ const ProceedToPaymentForm = () => {
       const numericValue = Math.max(min, Math.min(Number(value), max));
       field.onChange(numericValue.toString());
     }
-
-    if (changed) {
-      setIsInputChanged(true);
-    }
   };
 
   const grandTotal = useMemo(() => {
@@ -98,37 +98,69 @@ const ProceedToPaymentForm = () => {
   const { price: formattedGrandTotal } = formatPrice(grandTotal?.toString());
 
   useEffect(() => {
+    dispatch(setDiscount(+amount));
     dispatch(setTax(+tax));
-    dispatch(setDiscount(+discount));
   }, [tax, amount]);
 
   useEffect(() => {
-    if (isUpdating !== "amount" && discount && isInputChanged) {
-      setIsUpdating("discount");
+    let finalAmount;
+
+    if (isUpdating === "discount") {
       const calculatedAmount = (Number(discount) / 100) * totalPrice;
-      const finalAmount = Number.isInteger(calculatedAmount)
-        ? calculatedAmount?.toString()
-        : calculatedAmount?.toFixed(2);
-
+      finalAmount = Boolean(calculatedAmount)
+        ? calculatedAmount?.toFixed(2)
+        : 0;
       form.setValue("amount", finalAmount);
-      setIsUpdating(null);
-      setIsInputChanged(false);
+    } else {
+      finalAmount = amount;
     }
-  }, [discount, totalPrice, form.setValue, isUpdating]);
 
-  useEffect(() => {
-    if (isUpdating !== "discount" && amount && isInputChanged) {
-      setIsUpdating("amount");
+    if (isUpdating === "amount") {
       const calculatedDiscount = (Number(amount) / totalPrice) * 100;
-      const finalDiscount = Number.isInteger(calculatedDiscount)
-        ? calculatedDiscount.toString()
-        : calculatedDiscount.toFixed(2);
+      const finalDiscount = Boolean(calculatedDiscount)
+        ? calculatedDiscount?.toFixed(2)
+        : 0;
 
       form.setValue("discount", finalDiscount);
-      setIsUpdating(null);
-      setIsInputChanged(false);
     }
-  }, [amount, totalPrice, form.setValue, isUpdating]);
+    if (isUpdating === "taxPercent") {
+      const calculatedTax =
+        (Number(taxPercent) / 100) *
+        (amount ? totalPrice - amount : totalPrice);
+      const finalTax = Boolean(calculatedTax) ? calculatedTax?.toFixed(2) : 0;
+
+      form.setValue("tax", finalTax);
+    }
+
+    if (isUpdating === "tax") {
+      const calculatedTaxPercent =
+        (Number(tax) / (amount ? totalPrice - amount : totalPrice)) * 100;
+      const finalTaxPercent = Boolean(calculatedTaxPercent)
+        ? calculatedTaxPercent?.toFixed(2)
+        : 0;
+
+      form.setValue("taxPercent", finalTaxPercent);
+    }
+
+    if (isUpdating === "amount" || isUpdating === "discount") {
+      const calculatedTax =
+        (Number(taxPercent) / 100) *
+        (finalAmount ? totalPrice - finalAmount : totalPrice);
+      const finalTax = Boolean(calculatedTax) ? calculatedTax?.toFixed(2) : 0;
+
+      form.setValue("tax", finalTax);
+
+      const calculatedTaxPercent =
+        (Number(calculatedTax) /
+          (finalAmount ? totalPrice - finalAmount : totalPrice)) *
+        100;
+      const finalTaxPercent = Boolean(calculatedTaxPercent)
+        ? calculatedTaxPercent?.toFixed(2)
+        : 0;
+
+      form.setValue("taxPercent", finalTaxPercent);
+    }
+  }, [amount, totalPrice, discount, tax, taxPercent, isUpdating]);
 
   return (
     <form
@@ -156,9 +188,7 @@ const ProceedToPaymentForm = () => {
                     autoComplete="off"
                     type="number"
                     className="h-9 w-[80px] border-violent-40 px-4 text-xl font-medium"
-                    onChange={(e) =>
-                      inputValidator({ e, field, changed: true, max: 100 })
-                    }
+                    onChange={(e) => inputValidator({ e, field, max: 100 })}
                   />
                 </FormControl>
                 <FormMessage />
@@ -184,7 +214,6 @@ const ProceedToPaymentForm = () => {
                         e,
                         field,
                         max: totalPrice,
-                        changed: true,
                       })
                     }
                   />
@@ -195,25 +224,48 @@ const ProceedToPaymentForm = () => {
           />
         </div>
       </div>
-      <div className="flex items-center gap-1 justify-between py-1.5">
-        <div className="text-sm">Tax</div>
-        <FormField
-          control={form.control}
-          name="tax"
-          render={({ field }) => (
-            <FormItem>
-              <FormControl>
-                <Input
-                  {...field}
-                  autoComplete="off"
-                  className="h-9 w-[104px] border-violent-40 px-4 text-xl font-medium"
-                  onChange={(e) => inputValidator({ e, field })}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+      <div className="flex gap-1 justify-between py-1.5 flex-wrap xl:flex-nowrap">
+        <div className="flex items-center gap-2 w-full justify-between xl:justify-start">
+          <div className="text-sm">Tax (%)</div>
+          <FormField
+            control={form.control}
+            name="taxPercent"
+            render={({ field }) => (
+              <FormItem>
+                <FormControl>
+                  <Input
+                    {...field}
+                    autoComplete="off"
+                    type="number"
+                    className="h-9 w-[80px] border-violent-40 px-4 text-xl font-medium"
+                    onChange={(e) => inputValidator({ e, field, max: 100 })}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
+        <div className="flex items-center gap-2 w-full justify-between xl:justify-end">
+          <div className="text-sm">Amount</div>
+          <FormField
+            control={form.control}
+            name="tax"
+            render={({ field }) => (
+              <FormItem>
+                <FormControl>
+                  <Input
+                    {...field}
+                    autoComplete="off"
+                    className="h-9 w-[104px] border-violent-40 px-4 text-xl font-medium"
+                    onChange={(e) => inputValidator({ e, field })}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
       </div>
 
       <div className="flex items-center gap-1 justify-between pt-1.5 pb-4">

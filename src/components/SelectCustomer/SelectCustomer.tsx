@@ -28,6 +28,7 @@ const SelectCustomer = ({ step, setStep }: SelectCustomerProps) => {
       discount: 0,
       amount: 0,
       tax: 0,
+      taxPercent: 0,
     },
   });
 

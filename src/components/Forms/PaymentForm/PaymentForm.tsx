@@ -53,8 +53,15 @@ const PaymentForm = ({
   step,
 }: PaymentFormProps) => {
   const { push } = useRouter();
-  const { balanceDue, grandTotal, cart, totalPrice, tax, discount } =
-    useSelector((state: RootState) => state.cart);
+  const {
+    balanceDue,
+    grandTotal,
+    cart,
+    totalPrice,
+    tax,
+    discount,
+    taxPercent,
+  } = useSelector((state: RootState) => state.cart);
   const { selectedCustomer } = useSelector(
     (state: RootState) => state.customer,
   );
@@ -88,6 +95,7 @@ const PaymentForm = ({
       discount: +discount,
       tax: +tax,
       total: +grandTotal,
+      taxPercent,
       paymentType: type,
       ...(!!data.creditCardAmount && {
         creditCardPayment: {

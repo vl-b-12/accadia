@@ -20,6 +20,7 @@ import {
   setDiscount,
   setGrandTotal,
   setTax,
+  setTaxPercent,
 } from "@/store/slices/CartSlice/cartSlice";
 import { formatPrice } from "@/lib/utils";
 import { useRouter } from "next/navigation";
@@ -100,7 +101,8 @@ const ProceedToPaymentForm = () => {
   useEffect(() => {
     dispatch(setDiscount(+amount));
     dispatch(setTax(+tax));
-  }, [tax, amount]);
+    dispatch(setTaxPercent(+taxPercent));
+  }, [tax, amount, taxPercent]);
 
   useEffect(() => {
     let finalAmount;

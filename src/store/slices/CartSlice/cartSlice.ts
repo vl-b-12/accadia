@@ -4,6 +4,7 @@ import { CartProduct } from "@/types/types";
 interface CartState {
   cart: CartProduct[];
   totalPrice: number;
+  taxPercent: number;
   totalQnt: number;
   tax: number;
   karatsBreakdown: KaratsBreakdown[] | null;
@@ -22,6 +23,7 @@ const initialState: CartState = {
   cart: [],
   totalPrice: 0,
   totalQnt: 0,
+  taxPercent: 0,
   tax: 0,
   karatsBreakdown: null,
   paid: 0,
@@ -43,6 +45,9 @@ export const cartSlice = createSlice({
     clearCart: () => initialState,
     setTax: (state, { payload }) => {
       state.tax = Number(payload);
+    },
+    setTaxPercent: (state, { payload }) => {
+      state.taxPercent = Number(payload);
     },
     setPaid: (state, { payload }) => {
       state.balanceDue = Number((state.grandTotal - payload).toFixed(2));
@@ -100,6 +105,7 @@ export const {
   setBalanceDue,
   setGrandTotal,
   setDiscount,
+  setTaxPercent,
 } = cartSlice.actions;
 
 export default cartSlice.reducer;

@@ -39,19 +39,18 @@ const cellStyle = "px-6 py-3";
 
 const HistoryList = forwardRef(
   ({ history }: HistoryListProps, ref: ForwardedRef<HTMLDivElement | null>) => {
-    const [selectOption, setSelectOption] = useState("");
     const [isDialogOpenIndex, setIsDialogOpenIndex] = useState(-1);
-    const { selectedCustomer } = useSelector(
+    const [selectOption, setSelectOption] = useState("");
+    const { selectedHistoryCustomer } = useSelector(
       (state: RootState) => state.customer,
     );
 
     const [shareSms] = useShareSmsMutation();
-    const [getDocumentLinks, { data: documentLinks }] =
-      useLazyGetDocumentLinksQuery();
+    const [getDocumentLinks, { data }] = useLazyGetDocumentLinksQuery();
 
     const selectedOptionLink = useMemo(
-      () => documentLinks?.find((option) => option.title === selectOption)?.url,
-      [selectOption, documentLinks],
+      () => data?.find((option) => option.title === selectOption)?.url,
+      [selectOption, data],
     );
 
     return (
@@ -119,8 +118,8 @@ const HistoryList = forwardRef(
                       unoptimized
                       className={cn("cursor-pointer")}
                       onClick={() => {
-                        if (documentLinks?.length) {
-                          const invoiceLink = documentLinks.find(
+                        if (data?.length) {
+                          const invoiceLink = data.find(
                             (link) => link.title === "Jewelry Invoice",
                           )?.url;
 
@@ -135,7 +134,7 @@ const HistoryList = forwardRef(
                       open={isDialogOpenIndex === id}
                       onOpenChange={async (isOpen) => {
                         setIsDialogOpenIndex(isOpen ? id : -1);
-                        await getDocumentLinks(id);
+                        await getDocumentLinks(selectedHistoryCustomer!.id);
                       }}
                     >
                       <DialogTrigger>
@@ -160,7 +159,7 @@ const HistoryList = forwardRef(
                             <SelectValue placeholder="Select an option" />
                           </SelectTrigger>
                           <SelectContent>
-                            {documentLinks?.map(
+                            {data?.map(
                               (
                                 documentLink: GetDocumentLinksResponse,
                                 index: number,
@@ -228,11 +227,11 @@ const HistoryList = forwardRef(
                             icon="/icons/send-icon.svg"
                             onClick={async () => {
                               if (
-                                selectedCustomer?.phoneNumber &&
+                                selectedHistoryCustomer?.phoneNumber &&
                                 selectedOptionLink
                               ) {
                                 await shareSms({
-                                  phoneTo: selectedCustomer.phoneNumber,
+                                  phoneTo: selectedHistoryCustomer.phoneNumber,
                                   messageBody: `Download invoice from ${selectedOptionLink}`,
                                 });
                               }
@@ -252,8 +251,8 @@ const HistoryList = forwardRef(
                           key={`${item.sku}_${id}`}
                           className="text-base font-medium underline cursor-pointer"
                           onClick={() => {
-                            if (documentLinks?.length) {
-                              const invoiceLink = documentLinks?.find(
+                            if (data?.length) {
+                              const invoiceLink = data?.find(
                                 (link) =>
                                   link.title === "POS Certificate of Appraisal",
                               )?.url;

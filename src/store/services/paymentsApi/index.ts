@@ -61,4 +61,4 @@ export const paymentsApi = apiRtk.injectEndpoints({
   }),
 });
 
-export const { useCreatePaymentMutation, useLazyGetInvoiceQuery } = paymentsApi;
+export const { useCreatePaymentMutation } = paymentsApi;

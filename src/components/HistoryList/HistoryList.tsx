@@ -53,6 +53,8 @@ const HistoryList = forwardRef(
       [selectOption, data],
     );
 
+    const isShareButtonDisabled = !selectOption;
+
     return (
       <div className="pt-6 px-6">
         <div className="grid grid-cols-[2fr_1fr_1fr_1fr_1fr_1fr] gap-2 text-base font-medium text-gray-70 border-b border-b-violent-30">
@@ -133,6 +135,7 @@ const HistoryList = forwardRef(
                     <Dialog
                       open={isDialogOpenIndex === id}
                       onOpenChange={async (isOpen) => {
+                        setSelectOption("");
                         setIsDialogOpenIndex(isOpen ? id : -1);
                         await getDocumentLinks(selectedHistoryCustomer!.id);
                       }}
@@ -178,6 +181,7 @@ const HistoryList = forwardRef(
 
                         <div className="grid grid-cols-4 gap-3">
                           <ShareButton
+                            disabled={isShareButtonDisabled}
                             text="Send Email"
                             icon="/icons/mail-icon.svg"
                             onClick={async () => {
@@ -192,6 +196,7 @@ const HistoryList = forwardRef(
                           <ShareButton
                             text="Copy URL"
                             icon="/icons/globe-icon.svg"
+                            disabled={isShareButtonDisabled}
                             onClick={async () => {
                               if (selectedOptionLink) {
                                 try {
@@ -210,6 +215,7 @@ const HistoryList = forwardRef(
                           <ShareButton
                             text="Preview"
                             icon="/icons/preview-icon.svg"
+                            disabled={isShareButtonDisabled}
                             onClick={async () => {
                               if (selectedOptionLink) {
                                 window.open(
@@ -225,6 +231,7 @@ const HistoryList = forwardRef(
                           <ShareButton
                             text="Send SMS"
                             icon="/icons/send-icon.svg"
+                            disabled={isShareButtonDisabled}
                             onClick={async () => {
                               if (
                                 selectedHistoryCustomer?.phoneNumber &&

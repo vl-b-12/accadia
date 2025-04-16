@@ -86,7 +86,7 @@ const HistoryList = forwardRef(
                 >
                   <AccordionTrigger className={cn(cellStyle)}>
                     <div className="font-medium">
-                      #{historyItem.paymentId}{" "}
+                      #{historyItem.docNo}{" "}
                       <span className="text-gray-70 text-sm pl-2.5 text-nowrap">
                         {historyItem.products.length} items
                       </span>
@@ -137,7 +137,7 @@ const HistoryList = forwardRef(
                       onOpenChange={async (isOpen) => {
                         setSelectOption("");
                         setIsDialogOpenIndex(isOpen ? id : -1);
-                        await getDocumentLinks(selectedHistoryCustomer!.id);
+                        await getDocumentLinks(historyItem!.paymentId);
                       }}
                     >
                       <DialogTrigger>
@@ -270,7 +270,7 @@ const HistoryList = forwardRef(
                             }
                           }}
                         >
-                          {item.name}
+                          {item.sku} {item.name}
                         </div>
                       ))}
                     </div>

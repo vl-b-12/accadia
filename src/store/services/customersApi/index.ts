@@ -53,6 +53,7 @@ interface ZipResponse {
 
 export interface CustomerHistoryResponse {
   paymentId: number;
+  docNo: string;
   purchaseDate: string;
   price: number;
   taxes: number;

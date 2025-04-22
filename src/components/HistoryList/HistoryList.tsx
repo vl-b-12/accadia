@@ -137,7 +137,10 @@ const HistoryList = forwardRef(
                       onOpenChange={async (isOpen) => {
                         setSelectOption("");
                         setIsDialogOpenIndex(isOpen ? id : -1);
-                        await getDocumentLinks(historyItem!.paymentId);
+                        const { data: sharingOptions } = await getDocumentLinks(
+                          historyItem!.paymentId,
+                        );
+                        setSelectOption(sharingOptions?.[0].title ?? "");
                       }}
                     >
                       <DialogTrigger>
@@ -188,8 +191,6 @@ const HistoryList = forwardRef(
                               if (selectedOptionLink) {
                                 window.location.href = `mailto:?body=${encodeURIComponent(selectedOptionLink)}`;
                               }
-
-                              setIsDialogOpenIndex(-1);
                             }}
                           />
 
@@ -207,8 +208,6 @@ const HistoryList = forwardRef(
                                   console.error("Clipboard copy error:", err);
                                 }
                               }
-
-                              setIsDialogOpenIndex(-1);
                             }}
                           />
 
@@ -224,8 +223,6 @@ const HistoryList = forwardRef(
                                   "noopener,noreferrer",
                                 );
                               }
-
-                              setIsDialogOpenIndex(-1);
                             }}
                           />
                           <ShareButton
@@ -242,8 +239,6 @@ const HistoryList = forwardRef(
                                   messageBody: `Download invoice from ${selectedOptionLink}`,
                                 });
                               }
-
-                              setIsDialogOpenIndex(-1);
                             }}
                           />
                         </div>

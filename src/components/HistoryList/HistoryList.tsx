@@ -191,6 +191,7 @@ const HistoryList = forwardRef(
                               if (selectedOptionLink) {
                                 window.location.href = `mailto:?body=${encodeURIComponent(selectedOptionLink)}`;
                               }
+                              setIsDialogOpenIndex(-1);
                             }}
                           />
 
@@ -208,6 +209,7 @@ const HistoryList = forwardRef(
                                   console.error("Clipboard copy error:", err);
                                 }
                               }
+                              setIsDialogOpenIndex(-1);
                             }}
                           />
 
@@ -223,6 +225,7 @@ const HistoryList = forwardRef(
                                   "noopener,noreferrer",
                                 );
                               }
+                              setIsDialogOpenIndex(-1);
                             }}
                           />
                           <ShareButton
@@ -239,6 +242,7 @@ const HistoryList = forwardRef(
                                   messageBody: `Download invoice from ${selectedOptionLink}`,
                                 });
                               }
+                              setIsDialogOpenIndex(-1);
                             }}
                           />
                         </div>

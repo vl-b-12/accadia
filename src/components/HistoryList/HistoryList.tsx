@@ -225,7 +225,6 @@ const HistoryList = forwardRef(
                                   "noopener,noreferrer",
                                 );
                               }
-                              setIsDialogOpenIndex(-1);
                             }}
                           />
                           <ShareButton

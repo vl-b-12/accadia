@@ -68,7 +68,7 @@ const PaymentForm = ({
   const isFullType = type === "full";
   const dispatch = useDispatch();
 
-  const [createPayment] = useCreatePaymentMutation();
+  const [createPayment, { isLoading }] = useCreatePaymentMutation();
 
   const form = useForm({
     resolver: zodResolver(paymentFormSchema),
@@ -227,9 +227,11 @@ const PaymentForm = ({
                 variant="primary"
                 className="h-14 uppercase w-[166px] absolute right-6 bottom-6"
                 type="submit"
-                disabled={!form.formState.isValid || balanceDue !== 0}
+                disabled={
+                  !form.formState.isValid || balanceDue !== 0 || isLoading
+                }
               >
-                Submit
+                {isLoading ? "Submitting..." : "Submit"}
               </Button>
             </>
           )}
